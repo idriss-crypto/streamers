@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>IDriss - OBS Preview</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="A preview of your OBS overlay" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="apple-touch-icon" sizes="180x180" href="../static/images/apple-touch-icon.png" />
+        <link rel="shortcut icon" type="image/png" href="../static/images/favicon32.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="../static/images/favicon32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="../static/images/favicon16.png" />
+    </head>
+    <body class="relative h-screen bg-cover bg-center bg-fixed overflow-hidden" style="background-image: url('https://storage.googleapis.com/prod.static-assets.parallelnft.com/newsfeed/images/Kathari_Pod_Room_02.png');">
+        <style>
+            #fader {
+                opacity: 1;
+                transition: opacity 1s;
+            }
+        </style>
+        <!-- NOTIFICATION -->
+        <div id="fader" style="opacity: 100;" class="mt-12">
+            <div id="donationAlert" class="absolute top-0 left-0 p-6 text-white bg-white bg-opacity-20 rounded-r-md">
+                <dt>
+                    <div class="absolute flex items-center justify-center h-14 w-14 text-white">
+                        <img class="w-auto h-16" src="../static/images/IDriss_Brandmark.svg" alt="IDriss" />
+                    </div>
+                    <p id="baseInfo" class="pt-1 ml-16 text-xl text-white leading-6 font-bold">Someone tipped $1</p>
+                </dt>
+                <dd id="message" class="ml-16 text-lg text-white font-medium">
+                    GG!
+                </dd>
+            </div>
+        </div>
+        <!-- SCRIPT -->
+        <script type="text/javascript" src=".../static/js/web3.min.js"></script>
+        <script type="text/javascript" src="../static/js/obs.js"></script>
+    </body>
+</html>

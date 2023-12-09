@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>IDriss - Donate</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Select your donation details" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="apple-touch-icon" sizes="180x180" href="../static/images/apple-touch-icon.png" />
+        <link rel="shortcut icon" type="image/png" href="../static/images/favicon32.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="../static/images/favicon32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="../static/images/favicon16.png" />
+    </head>
+    <body>
+        <!-- NAVBAR -->
+        <nav class="w-full">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <a href="/">
+                                <img class="h-8 w-auto sm:h-12" src="../static/images/IDriss_Logo.svg" alt="IDriss Logo" />
+                            </a>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div id="connectWalletDiv" class="flex items-center md:ml-6 justify-end w-full">
+                            <div class="relative">
+                                <div class="sm:flex items-center justify-end md:flex-1">
+                                    <!-- LENNARD: THIS IS THE RIGHT ID FROM THE LIVE VERSION -->
+                                    <input
+                                        id="connectWalletButton"
+                                        type="submit"
+                                        value="Connect Wallet"
+                                        class="w-10/12 sm:w-full ml-6 sm:ml-4 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-[#11dd74] hover:bg-[#11cc74] hover:cursor-pointer"
+                                    />
+                                    <!-- LENNARD: THIS NEEDS THE LOGIC FROM IDRISS SEND TO DISPLAY CONNECTED ADDRESS ETC. ALL IDs ARE FROM IDRISS SEND -->
+                                    <div
+                                        id="connectedWallet"
+                                        class="hidden flex w-10/12 sm:w-full ml-6 sm:ml-4 whitespace-nowrap inline-flex items-center justify-center px-2 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-gray-900"
+                                    >
+                                        <input type="submit" value="" />
+                                        <a
+                                            id="polygon-scan-link"
+                                            rel="noopener noreferrer"
+                                            target="_blank"
+                                            class="ml-2 items-center justify-center px-1 py-1 border border-transparent rounded-md shadow-sm bg-indigo-50 hover:cursor-pointer text-gray-500 hover:text-[#5865F2]"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                                            </svg>
+                                        </a>
+                                        <div id="disconnectWallet" class="ml-1 items-center justify-center px-1 py-1 border border-transparent rounded-md shadow-sm bg-indigo-50 hover:cursor-pointer text-gray-500 hover:text-[#5865F2]">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1012.728 0M12 3v9" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- MAIN APP -->
+        <div class="w-11/12 sm:w-full max-w-md mx-auto bg-white rounded-lg shadow-2xl pl-6 pt-6 pr-6 pb-3 mt-16">
+            <p class="mb-5"><span class="font-bold text-2xl text-gray-900">Select your donation details</span><br /></p>
+            <div class="mb-4">
+                <label for="network" class="block mb-1 text-sm text-gray-700">Network</label>
+                <select id="network" name="network" class="w-full px-4 py-2 border rounded focus:outline-none focus:border-[#5865F2] bg-white text-sm"> </select>
+            </div>
+            <div class="mb-4">
+                <label for="token" class="block mb-1 text-sm text-gray-700">Token</label>
+                <select id="token" name="token" class="w-full px-4 py-2 border rounded focus:outline-none focus:border-[#5865F2] bg-white text-sm"> </select>
+            </div>
+            <div class="mb-4">
+                <label for="amount" class="block mb-1 text-sm text-gray-700">Amount ($)</label>
+                <input type="number" id="amount" name="amount" class="w-full px-4 py-2 border rounded focus:outline-none focus:border-[#5865F2] text-sm text-gray-700" />
+            </div>
+            <div class="mb-4">
+                <label for="message" class="block mb-1 text-sm text-gray-700">Message</label>
+                <textarea id="message" name="message" rows="2" class="w-full px-4 py-2 border rounded focus:outline-none focus:border-[#5865F2] resize-none text-sm text-gray-700"></textarea>
+                <div class="mb-4 pr-0.5 -mt-1 text-right text-gray-500 leading-5 text-xs font-normal">
+                    <p>Characters left: <span id="charCount">70</span></p>
+                </div>
+            </div>
+            <button id="sendButton" class="w-full bg-[#5865f2] hover:bg-[#5854f2] text-white font-medium py-2 px-4 mt-2 rounded focus:outline-none focus:shadow-outline">
+                Send
+            </button>
+            <p class="text-xs text-center font-medium text-gray-500 mt-3">
+                <a href="https://docs.idriss.xyz/user-guides/protocol-fees" target="_blank" class="underline text-[#5865F2]" rel="noopener noreferrer">1% supplies IDriss' treasury</a>
+            </p>
+        </div>
+        <!-- FOOTER -->
+        <div class="bg-white inset-x-0 bottom-0 fixed">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6">
+                <div class="items-center border-b-2 border-gray-100 py-6 md:space-x-10">
+                    <nav class="flex space-x-10 justify-center">
+                        <a href="/" target="_blank" class="text-base font-medium text-gray-500 hover:text-gray-900" rel="noopener noreferrer">Home</a>
+                        <a href="/docs" target="_blank" class="text-base font-medium text-gray-500 hover:text-gray-900" rel="noopener noreferrer">Docs</a>
+                        <a href="https://twitter.com/IDriss_xyz" target="_blank" class="text-base font-medium text-gray-500 hover:text-gray-900" rel="noopener noreferrer">Twitter</a>
+                        <a href="/discord" target="_blank" class="text-base font-medium text-gray-500 hover:text-gray-900" rel="noopener noreferrer">Discord</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <!-- SCRIPT -->
+        <script type="text/javascript" src="../static/js/web3.min.js"></script>
+        <script type="text/javascript" src="../static/js/donationScript.js"></script>
+    </body>
+</html>
