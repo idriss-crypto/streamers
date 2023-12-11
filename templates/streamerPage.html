@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content="Create your donation links" />
         <script src="https://cdn.tailwindcss.com"></script>
+        <!--Use global icons-->
         <link rel="apple-touch-icon" sizes="180x180" href="../static/images/apple-touch-icon.png" />
         <link rel="shortcut icon" type="image/png" href="../static/images/favicon32.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="../static/images/favicon32.png" />
@@ -39,6 +40,7 @@
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
                             <a href="/">
+                                <!--Use global IDriss_Logo-->
                                 <img class="h-8 w-auto sm:h-12" src="../static/images/IDriss_Logo.svg" alt="IDriss Logo" />
                             </a>
                         </div>
@@ -114,9 +116,9 @@
             <p class="mt-6 mb-5"><span class="font-bold text-2xl text-gray-900">Download a banner for your bio</span><br /></p>
             <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
                 <div class="relative group">
-                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="../static/images/Banner_1.png" alt="" />
+                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="{{ url_for('.static', filename='images/Banner_1.png') }}" alt="" />
                     <a
-                        href="../static/images/Banner_1.png"
+                        href="{{ url_for('.static', filename='images/Banner_1.png') }}"
                         download="Banner_1.png"
                         class="absolute bottom-4 right-4 transform translate-x-1/2 translate-y-1/2 bg-gray-50 rounded text-gray-500 p-1 opacity-0 group-hover:opacity-100 hover:cursor-pointer"
                     >
@@ -126,9 +128,9 @@
                     </a>
                 </div>
                 <div class="relative group">
-                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="../static/images/Banner_2.png" alt="" />
+                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="{{ url_for('.static', filename='images/Banner_2.png') }}" alt="" />
                     <a
-                        href="../static/images/Banner_2.png"
+                        href="{{ url_for('.static', filename='images/Banner_2.png') }}"
                         download="Banner_2.png"
                         class="absolute bottom-4 right-4 transform translate-x-1/2 translate-y-1/2 bg-gray-50 rounded text-gray-500 p-1 opacity-0 group-hover:opacity-100 hover:cursor-pointer"
                     >
@@ -138,9 +140,9 @@
                     </a>
                 </div>
                 <div class="relative group">
-                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="../static/images/Banner_3.png" alt="" />
+                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="{{ url_for('.static', filename='images/Banner_3.png') }}" alt="" />
                     <a
-                        href="../static/images/Banner_3.png"
+                        href="{{ url_for('.static', filename='images/Banner_3.png') }}"
                         download="Banner_3.png"
                         class="absolute bottom-4 right-4 transform translate-x-1/2 translate-y-1/2 bg-gray-50 rounded text-gray-500 p-1 opacity-0 group-hover:opacity-100 hover:cursor-pointer"
                     >
@@ -150,9 +152,9 @@
                     </a>
                 </div>
                 <div class="relative group">
-                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="../static/images/Banner_4.png" alt="" />
+                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="{{ url_for('.static', filename='images/Banner_4.png') }}" alt="" />
                     <a
-                        href="../static/images/Banner_4.png"
+                        href="{{ url_for('.static', filename='images/Banner41.png') }}"
                         download="Banner_4.png"
                         class="absolute bottom-4 right-4 transform translate-x-1/2 translate-y-1/2 bg-gray-50 rounded text-gray-500 p-1 opacity-0 group-hover:opacity-100 hover:cursor-pointer"
                     >
@@ -162,9 +164,9 @@
                     </a>
                 </div>
                 <div class="relative group">
-                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="../static/images/Banner_5.png" alt="" />
+                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="{{ url_for('.static', filename='images/Banner_5.png') }}" alt="" />
                     <a
-                        href="../static/images/Banner_5.png"
+                        href="{{ url_for('.static', filename='images/Banner_5.png') }}"
                         download="Banner_5.png"
                         class="absolute bottom-4 right-4 transform translate-x-1/2 translate-y-1/2 bg-gray-50 rounded text-gray-500 p-1 opacity-0 group-hover:opacity-100 hover:cursor-pointer"
                     >
@@ -174,9 +176,9 @@
                     </a>
                 </div>
                 <div class="relative group">
-                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="../static/images/Banner_6.png" alt="" />
+                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="{{ url_for('.static', filename='images/Banner_6.png') }}" alt="" />
                     <a
-                        href="../static/images/Banner_6.png"
+                        href="{{ url_for('.static', filename='images/Banner_6.png') }}"
                         download="Banner_6.png"
                         class="absolute bottom-4 right-4 transform translate-x-1/2 translate-y-1/2 bg-gray-50 rounded text-gray-500 p-1 opacity-0 group-hover:opacity-100 hover:cursor-pointer"
                     >
@@ -186,9 +188,9 @@
                     </a>
                 </div>
                 <div class="relative group">
-                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="../static/images/Banner_7.png" alt="" />
+                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="{{ url_for('.static', filename='images/Banner_7.png') }}" alt="" />
                     <a
-                        href="../static/images/Banner_7.png"
+                        href="{{ url_for('.static', filename='images/Banner_7.png') }}"
                         download="Banner_7.png"
                         class="absolute bottom-4 right-4 transform translate-x-1/2 translate-y-1/2 bg-gray-50 rounded text-gray-500 p-1 opacity-0 group-hover:opacity-100 hover:cursor-pointer"
                     >
@@ -198,9 +200,9 @@
                     </a>
                 </div>
                 <div class="relative group">
-                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="../static/images/Banner_8.png" alt="" />
+                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="{{ url_for('.static', filename='images/Banner_8.png') }}" alt="" />
                     <a
-                        href="../static/images/Banner_8.png"
+                        href="{{ url_for('.static', filename='images/Banner_8.png') }}"
                         download="Banner_8.png"
                         class="absolute bottom-4 right-4 transform translate-x-1/2 translate-y-1/2 bg-gray-50 rounded text-gray-500 p-1 opacity-0 group-hover:opacity-100 hover:cursor-pointer"
                     >
@@ -210,9 +212,9 @@
                     </a>
                 </div>
                 <div class="relative group">
-                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="../static/images/Banner_9.png" alt="" />
+                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="{{ url_for('.static', filename='images/Banner_9.png') }}" alt="" />
                     <a
-                        href="../static/images/Banner_9.png"
+                        href="{{ url_for('.static', filename='images/Banner_9.png') }}"
                         download="Banner_9.png"
                         class="absolute bottom-4 right-4 transform translate-x-1/2 translate-y-1/2 bg-gray-50 rounded text-gray-500 p-1 opacity-0 group-hover:opacity-100 hover:cursor-pointer"
                     >
@@ -222,9 +224,9 @@
                     </a>
                 </div>
                 <div class="relative group">
-                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="../static/images/Banner_10.png" alt="" />
+                    <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="{{ url_for('.static', filename='images/Banner_10.png') }}" alt="" />
                     <a
-                        href="../static/images/Banner_10.png"
+                        href="{{ url_for('.static', filename='images/Banner_10.png') }}"
                         download="Banner_10.png"
                         class="absolute bottom-4 right-4 transform translate-x-1/2 translate-y-1/2 bg-gray-50 rounded text-gray-500 p-1 opacity-0 group-hover:opacity-100 hover:cursor-pointer"
                     >
@@ -263,7 +265,7 @@
                 <textarea id="generatedUrl" class="w-full px-3 py-2 border rounded focus:outline-none focus:border-[#5865F2] resize-none overflow-hidden text-sm text-gray-700" rows="3" readonly></textarea>
                 <div class="flex">
                     <button id="previewButton" class="hidden mt-3 mr-2 w-full bg-[#11dd74] hover:bg-[#11cc74] text-white font-medium py-2 rounded focus:outline-none focus:shadow-outline">
-                        <a href="obsPreview.html" target="_blank" rel="noopener noreferrer">Preview</a>
+                        <a href="/preview" target="_blank" rel="noopener noreferrer">Preview</a>
                     </button>
                     <button id="copyButton" class="mt-3 w-full bg-[#5865f2] hover:bg-[#5854f2] text-white font-medium py-2 rounded focus:outline-none focus:shadow-outline">
                         Copy
@@ -272,6 +274,6 @@
             </div>
         </div>
         <!-- SCRIPT -->
-        <script type="text/javascript" src="../static/js/streamerScript.js"></script>
+        <script type="text/javascript" src="{{ url_for('.static', filename='../static/js/streamerScript.js') }}"></script>
     </body>
 </html>
