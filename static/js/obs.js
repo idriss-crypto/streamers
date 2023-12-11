@@ -32,28 +32,26 @@ const web3Ethereum = new Web3(new Web3.providers.HttpProvider("https://mainnet.i
 const web3Polygon = new Web3(new Web3.providers.HttpProvider("https://polygon-rpc.com/"));
 
 
-let coingeckoId = {
-    "base": {
-        "0x0000000000000000000000000000000000000000": ["ethereum", 18],
-        "0xfA980cEd6895AC314E7dE34Ef1bFAE90a5AdD21b": ["echelon-prime", 18]
-        "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913": ["usdc", 6]
+let portal_fi = {
+    optimism: {
+        "0x0000000000000000000000000000000000000000": ["optimism:0x0000000000000000000000000000000000000000", 18]
+        "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85": ["optimism:0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85", 6]
     },
-    "optimism": {
-        "0x0000000000000000000000000000000000000000": ["ethereum", 18]
-        "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85": ["usdc", 18]
+    base: {
+        "0x0000000000000000000000000000000000000000": ["base:0x0000000000000000000000000000000000000000", 18],
+        "0xfA980cEd6895AC314E7dE34Ef1bFAE90a5AdD21b": ["base:0xfA980cEd6895AC314E7dE34Ef1bFAE90a5AdD21b", 18]
     },
-    "ethereum": {
-        "0x0000000000000000000000000000000000000000": ["ethereum", 18],
-        "0xb23d80f5fefcddaa212212f028021b41ded428cf": ["echelon-prime", 18]
-        "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48": ["usdc", 6]
-        "0x3F382DbD960E3a9bbCeaE22651E88158d2791550": ["ghst", 18]
-    },
-    "polygon": {
-        "0x0000000000000000000000000000000000000000": ["matic", 18]
-        "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174": ["usdc", 6]
-        "0x385Eeac5cB85A38A9a07A70c73e0a3271CfB54A7": ["ghst", 18]
+    ethereum: {
+        "0x0000000000000000000000000000000000000000": ["ethereum:0x0000000000000000000000000000000000000000", 18]
+        "0xb23d80f5fefcddaa212212f028021b41ded428cf": ["ethereum:0xb23d80f5fefcddaa212212f028021b41ded428cf", 18]
+        "0x3F382DbD960E3a9bbCeaE22651E88158d2791550": ["ethereum:0x3F382DbD960E3a9bbCeaE22651E88158d2791550", 18]
+        "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48": ["ethereum:0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", 6]
     }
-};
+    polygon: {
+        "0x385Eeac5cB85A38A9a07A70c73e0a3271CfB54A7": ["polygon:0x385Eeac5cB85A38A9a07A70c73e0a3271CfB54A7", 18]
+        "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174": ["polygon:0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", 6]
+    }
+}
 
 
 async function loadTipping(web3, contractAddr, contractABI) {
@@ -149,10 +147,10 @@ async function fetchDonations() {
             let inputs = await getInputs(method, remove);
             console.log(inputs)
             let tempRet = {
-                amount: eventsBase[i].returnValues.amount,
-                tokenAddress: eventsBase[i].returnValues.tokenAddress,
+                amount: eventsBase[i].returnValues._amount,
+                tokenAddress: eventsBase[i].returnValues._tokenContractAddr,
                 tokenId : inputs._assetId,
-                message: eventsBase[i].returnValues.message,
+                message: eventsBase[i].returnValues._message,
                 fromAddress: from_,
                 network: "base"
             }
@@ -178,10 +176,10 @@ async function fetchDonations() {
             let inputs = await getInputs(method, remove);
             console.log(inputs)
             let tempRet = {
-                amount: eventsOP[i].returnValues.amount,
-                tokenAddress: eventsOP[i].returnValues.tokenAddress,
+                amount: eventsOP[i].returnValues._amount,
+                tokenAddress: eventsOP[i].returnValues._assetContractAddress,
                 tokenId : inputs._assetId,
-                message: eventsOP[i].returnValues.message,
+                message: eventsOP[i].returnValues._message,
                 fromAddress: from_,
                 network: "optimism"
             }
@@ -207,10 +205,10 @@ async function fetchDonations() {
             let inputs = await getInputs(method, remove);
             console.log(inputs)
             let tempRet = {
-                amount: eventsEthereum[i].returnValues.amount,
-                tokenAddress: eventsEthereum[i].returnValues.tokenAddress,
+                amount: eventsEthereum[i].returnValues._amount,
+                tokenAddress: eventsEthereum[i].returnValues._tokenContractAddr,
                 tokenId : inputs._assetId,
-                message: eventsEthereum[i].returnValues.message,
+                message: eventsEthereum[i].returnValues._message,
                 fromAddress: from_,
                 network: "ethereum"
             }
@@ -236,10 +234,10 @@ async function fetchDonations() {
             let inputs = await getInputs(method, remove);
             console.log(inputs)
             let tempRet = {
-                amount: eventsPolygon[i].returnValues.amount,
-                tokenAddress: eventsPolygon[i].returnValues.tokenAddress,
+                amount: eventsPolygon[i].returnValues._amount,
+                tokenAddress: eventsPolygon[i].returnValues._assetContractAddress,
                 tokenId : inputs._assetId,
-                message: eventsPolygon[i].returnValues.message,
+                message: eventsPolygon[i].returnValues._message,
                 fromAddress: from_,
                 network: "polygon"
             }
@@ -260,34 +258,12 @@ async function getVal(tippingAmount, tokenPrice, decimals) {
 
 async function calculateDollar(_assetAddr, _amount, _network) {
     let priceSt;
-    let response = await (await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoId[_network.toLowerCase()][_assetAddr][0]}&vs_currencies=USD`)).json();
-    priceSt = Object.values(Object.values(response)[0])[0];
+    let response = await (await fetch(`https://api.portals.fi/v2/tokens?ids=${portal_fi[_network.toLowerCase()][_assetAddr][0]}`)).json();
+    priceSt = response['tokens'][0]['price'];
 
-    let decimals = coingeckoId[_network][_assetAddr][1];
+    let decimals = portal_fi[_network.toLowerCase()][_assetAddr][1];
     let val = this.getVal(_amount, priceSt, decimals);
     return val;
-}
-
-async function getMetadataURI(nftAddress, tokenId, w3) {
-    const nftContract = new w3.eth.Contract(ERC1155Abi, nftAddress);
-    try {
-        const metadataURI = await nftContract.methods.uri(tokenId).call();
-        return metadataURI;
-    } catch (error) {
-        console.error('Error:', error);
-        return null;
-    }
-}
-
-async function fetchMetadata(metadataURI) {
-    try {
-        const response = await fetch(metadataURI);
-        const metadata = await response.json();
-        return metadata;
-    } catch (error) {
-        console.error('Error fetching metadata:', error);
-        return null;
-    }
 }
 
 interval = setInterval(async function () {
@@ -302,23 +278,7 @@ interval = setInterval(async function () {
         if (typeof(ret[i].tokenId) == "undefined") {
             basicInfo = fromAccount.substring(0, 6).concat("...").concat(fromAccount.substr(-4)) + " tipped you " + "$" + (await calculateDollar(ret[i].tokenAddress, ret[i].amount, ret[i].network.toLowerCase()));
         } else {
-            const metadataURI = await getMetadataURI(ret[i].tokenAddress, ret[i].tokenId, web3Base);
-            let nftName;
-            let nftImg;
-
-            if (metadataURI) {
-                const metadata = await fetchMetadata(metadataURI);
-                if (metadata) {
-                    nftName = metadata.name;
-                    nftImg = nft.image;
-                } else {
-                    console.log('Failed to fetch NFT metadata.');
-                }
-            } else {
-                console.log('Failed to retrieve metadata URI.');
-            }
-            basicInfo = fromAccount.substring(0, 6).concat("...").concat(fromAccount.substr(-4)) + " sent " + nftName;
-            nftImgSrc = nftImg;
+            continue
         }
         
         message = ret[i].message;
@@ -329,17 +289,15 @@ interval = setInterval(async function () {
 }, 5000);
 
 displayAlerts = setInterval(async function () {
-    console.log("checking messages");
-    console.log(resTip)
     if (resTip.length > 0) {
         if (document.getElementById('fader').style.opacity == 0) {
             document.getElementById("baseInfo").innerHTML = resTip[0][0];
             document.getElementById("message").innerHTML = resTip[0][1];
-            if (typeof(resTip[0][2]) !== 'undefined') { 
+            if (typeof(resTip[0][2]) !== 'undefined') {
+                // Future: show NFT metadata
                 document.getElementById("nftImg").src = resTip[0][2];
                 document.getElementById("nftImg").style.display = "";
             }
-            console.log("visible")
             document.getElementById('fader').style.opacity = 1;
             console.log(document.getElementById("donationAlert").style.display);
             resTip.shift();
