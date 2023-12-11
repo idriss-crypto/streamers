@@ -1,6 +1,6 @@
 let streamerAddress;
 let playPalBase;
-let providerl
+let provider;
 let connectedAccount;
 let web3;
 let selectedNetwork;
