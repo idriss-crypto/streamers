@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
             coinError.classList.add("hidden");
         }
         
-        const obsUrl = `https://www.idriss.xyz/obs?streamerAddress=${walletAddressInput.value}`;
+        const obsUrl = `https://www.idriss.xyz/streamers/obs?streamerAddress=${walletAddressInput.value}`;
         openPopup(obsUrl);
 
         document.getElementById("generatedLinkHeader").innerHTML = "OBS Link";
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function() {
             coinError.classList.add("hidden");
         }
         
-        const donationUrl = `https://www.idriss.xyz/donorPage?streamerAddress=${walletAddressInput.value}&network=${selectedNetworks.join(',')}&token=${selectedCoins.join(',')},NFT`;
+        const donationUrl = `https://www.idriss.xyz/streamers/donate?streamerAddress=${walletAddressInput.value}&network=${selectedNetworks.join(',')}&token=${selectedCoins.join(',')}`;
         openPopup(donationUrl);
 
         document.getElementById("generatedLinkHeader").innerHTML = "Donation Link";

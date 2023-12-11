@@ -1,5 +1,4 @@
 let streamerAddress;
-let playPalBase;
 let provider;
 let connectedAccount;
 let web3;
@@ -9,7 +8,6 @@ let networkParams;
 let tokenParams;
 let networkParamsArray;
 let tokenParamsArray;
-let assetId;
 let assetAddress;
 let idriss;
 
@@ -73,7 +71,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     tokenSelect.addEventListener("change", async function(event) {
         selectedToken = event.target.value;
-        assetId = 0;
         console.log("Selected token:", selectedToken);
     });
 
@@ -114,14 +111,12 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 
     let abiTippingOG = [{"inputs":[{"internalType":"address","name":"_maticUsdAggregator","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"bytes","name":"innerError","type":"bytes"}],"name":"BatchError","type":"error"},{"inputs":[],"name":"tipping__withdraw__OnlyAdminCanWithdraw","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"recipientAddress","type":"address"},{"indexed":false,"internalType":"string","name":"message","type":"string"},{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":true,"internalType":"address","name":"tokenAddress","type":"address"}],"name":"TipMessage","type":"event"},{"inputs":[],"name":"MINIMAL_PAYMENT_FEE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MINIMAL_PAYMENT_FEE_DENOMINATOR","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"PAYMENT_FEE_PERCENTAGE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"PAYMENT_FEE_PERCENTAGE_DENOMINATOR","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"PAYMENT_FEE_SLIPPAGE_PERCENT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_adminAddress","type":"address"}],"name":"addAdmin","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"admins","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes[]","name":"_calls","type":"bytes[]"}],"name":"batch","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_minimalPaymentFee","type":"uint256"},{"internalType":"uint256","name":"_paymentFeeDenominator","type":"uint256"}],"name":"changeMinimalPaymentFee","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_paymentFeePercentage","type":"uint256"},{"internalType":"uint256","name":"_paymentFeeDenominator","type":"uint256"}],"name":"changePaymentFeePercentage","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"contractOwner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_adminAddress","type":"address"}],"name":"deleteAdmin","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_value","type":"uint256"},{"internalType":"enum AssetType","name":"_assetType","type":"uint8"}],"name":"getPaymentFee","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_recipient","type":"address"},{"internalType":"uint256","name":"_assetId","type":"uint256"},{"internalType":"uint256","name":"_amount","type":"uint256"},{"internalType":"address","name":"_assetContractAddress","type":"address"},{"internalType":"string","name":"_message","type":"string"}],"name":"sendERC1155To","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"_recipient","type":"address"},{"internalType":"uint256","name":"_tokenId","type":"uint256"},{"internalType":"address","name":"_nftContractAddress","type":"address"},{"internalType":"string","name":"_message","type":"string"}],"name":"sendERC721To","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"_recipient","type":"address"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"string","name":"_message","type":"string"}],"name":"sendTo","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"_recipient","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"},{"internalType":"address","name":"_tokenContractAddr","type":"address"},{"internalType":"string","name":"_message","type":"string"}],"name":"sendTokenTo","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"pure","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_tokenContract","type":"address"}],"name":"withdrawToken","outputs":[],"stateMutability":"nonpayable","type":"function"}];
-    let abiTippingOP = [{"inputs":[{"internalType":"address","name":"_nativeUsdAggregator","type":"address"},{"internalType":"address","name":"_eas","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"bytes","name":"innerError","type":"bytes"}],"name":"BatchError","type":"error"},{"inputs":[],"name":"InvalidEAS","type":"error"},{"inputs":[],"name":"tipping__withdraw__OnlyAdminCanWithdraw","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"recipientAddress","type":"address"},{"indexed":false,"internalType":"string","name":"message","type":"string"},{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":true,"internalType":"address","name":"tokenAddress","type":"address"},{"indexed":false,"internalType":"uint256","name":"fee","type":"uint256"}],"name":"TipMessage","type":"event"},{"inputs":[],"name":"MINIMAL_PAYMENT_FEE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MINIMAL_PAYMENT_FEE_DENOMINATOR","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"PAYMENT_FEE_PERCENTAGE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"PAYMENT_FEE_PERCENTAGE_DENOMINATOR","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"PAYMENT_FEE_SLIPPAGE_PERCENT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_adminAddress","type":"address"}],"name":"addAdmin","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"publicGoodAddress","type":"address"}],"name":"addPublicGood","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"admins","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes[]","name":"_calls","type":"bytes[]"}],"name":"batch","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_minimalPaymentFee","type":"uint256"},{"internalType":"uint256","name":"_paymentFeeDenominator","type":"uint256"}],"name":"changeMinimalPaymentFee","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_paymentFeePercentage","type":"uint256"},{"internalType":"uint256","name":"_paymentFeeDenominator","type":"uint256"}],"name":"changePaymentFeePercentage","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"contractOwner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_adminAddress","type":"address"}],"name":"deleteAdmin","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"publicGoodAddress","type":"address"}],"name":"deletePublicGood","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_value","type":"uint256"},{"internalType":"enum AssetType","name":"_assetType","type":"uint8"}],"name":"getPaymentFee","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"publicGoods","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_recipient","type":"address"},{"internalType":"uint256","name":"_assetId","type":"uint256"},{"internalType":"uint256","name":"_amount","type":"uint256"},{"internalType":"address","name":"_assetContractAddress","type":"address"},{"internalType":"string","name":"_message","type":"string"}],"name":"sendERC1155To","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"_recipient","type":"address"},{"internalType":"uint256","name":"_tokenId","type":"uint256"},{"internalType":"address","name":"_nftContractAddress","type":"address"},{"internalType":"string","name":"_message","type":"string"}],"name":"sendERC721To","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"_recipient","type":"address"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"string","name":"_message","type":"string"}],"name":"sendTo","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"_recipient","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"},{"internalType":"address","name":"_tokenContractAddr","type":"address"},{"internalType":"string","name":"_message","type":"string"}],"name":"sendTokenTo","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"pure","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_tokenContract","type":"address"}],"name":"withdrawToken","outputs":[],"stateMutability":"nonpayable","type":"function"}];
     let abiTippingBase = [{"inputs":[{"internalType":"address","name":"_nativeUsdAggregator","type":"address"},{"internalType":"address","name":"_eas","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"bytes","name":"innerError","type":"bytes"}],"name":"BatchError","type":"error"},{"inputs":[],"name":"InvalidEAS","type":"error"},{"inputs":[],"name":"tipping__withdraw__OnlyAdminCanWithdraw","type":"error"},{"inputs":[],"name":"unknown_function_selector","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"recipientAddress","type":"address"},{"indexed":false,"internalType":"string","name":"message","type":"string"},{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":true,"internalType":"address","name":"tokenAddress","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"fee","type":"uint256"}],"name":"TipMessage","type":"event"},{"inputs":[],"name":"MINIMAL_PAYMENT_FEE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MINIMAL_PAYMENT_FEE_DENOMINATOR","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"PAYMENT_FEE_PERCENTAGE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"PAYMENT_FEE_PERCENTAGE_DENOMINATOR","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"PAYMENT_FEE_SLIPPAGE_PERCENT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_adminAddress","type":"address"}],"name":"addAdmin","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"publicGoodAddress","type":"address"}],"name":"addPublicGood","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"admins","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes[]","name":"_calls","type":"bytes[]"}],"name":"batch","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_minimalPaymentFee","type":"uint256"},{"internalType":"uint256","name":"_paymentFeeDenominator","type":"uint256"}],"name":"changeMinimalPaymentFee","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_paymentFeePercentage","type":"uint256"},{"internalType":"uint256","name":"_paymentFeeDenominator","type":"uint256"}],"name":"changePaymentFeePercentage","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_adminAddress","type":"address"}],"name":"deleteAdmin","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"publicGoodAddress","type":"address"}],"name":"deletePublicGood","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_value","type":"uint256"},{"internalType":"enum AssetType","name":"_assetType","type":"uint8"}],"name":"getPaymentFee","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"publicGoods","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_recipient","type":"address"},{"internalType":"uint256","name":"_assetId","type":"uint256"},{"internalType":"uint256","name":"_amount","type":"uint256"},{"internalType":"address","name":"_assetContractAddress","type":"address"},{"internalType":"string","name":"_message","type":"string"}],"name":"sendERC1155To","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"_recipient","type":"address"},{"internalType":"uint256","name":"_tokenId","type":"uint256"},{"internalType":"address","name":"_nftContractAddress","type":"address"},{"internalType":"string","name":"_message","type":"string"}],"name":"sendERC721To","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"_recipient","type":"address"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"string","name":"_message","type":"string"}],"name":"sendTo","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"_recipient","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"},{"internalType":"address","name":"_tokenContractAddr","type":"address"},{"internalType":"string","name":"_message","type":"string"}],"name":"sendTokenTo","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"pure","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_tokenContract","type":"address"}],"name":"withdrawToken","outputs":[],"stateMutability":"nonpayable","type":"function"}];
     let tippingAddressBase = "0x324Ad1738B9308D5AF5E81eDd6389BFa082a8968";
-    let tippingAddressOP = "0x43F532D678b6a1587BE989a50526F89428f68315";
     let tippingAddressEthereum = "0xe18036D7E3377801a19d5Db3f9b236617979674E";
     let tippingAddressPolygon = "0xe35B356ac2c880cCcc769bA9393F0748d94ABBCa";
 
-    const playPalAddresses = {
+    const tippingAddresses = {
         "base": tippingAddressBase,
         "ethereum": tippingAddressEthereum,
         "polygon": tippingAddressPolygon
@@ -129,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const ERC20Abi = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"}];
 
     const web3Base = new Web3(new Web3.providers.HttpProvider("https://mainnet.base.org"));
-    const web3Ethereum = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/v3/"));
+    const web3Ethereum = new Web3(new Web3.providers.HttpProvider("https://eth.llamarpc.com"));
     const web3Polygon = new Web3(new Web3.providers.HttpProvider("https://polygon-rpc.com/"));
 
     let portal_fi = {
@@ -142,8 +137,9 @@ document.addEventListener("DOMContentLoaded", function() {
             "0xb23d80f5fefcddaa212212f028021b41ded428cf": ["ethereum:0xb23d80f5fefcddaa212212f028021b41ded428cf", 18],
             "0x3F382DbD960E3a9bbCeaE22651E88158d2791550": ["ethereum:0x3F382DbD960E3a9bbCeaE22651E88158d2791550", 18],
             "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48": ["ethereum:0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", 6]
-        }
+        },
         polygon: {
+            "0x0000000000000000000000000000000000000000": ["polygon:0x0000000000000000000000000000000000000000", 18],
             "0x385Eeac5cB85A38A9a07A70c73e0a3271CfB54A7": ["polygon:0x385Eeac5cB85A38A9a07A70c73e0a3271CfB54A7", 18],
             "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174": ["polygon:0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", 6]
         }
@@ -160,7 +156,7 @@ document.addEventListener("DOMContentLoaded", function() {
             "prime": "0xb23d80f5fefcddaa212212f028021b41ded428cf",
             "ghst": "0x3F382DbD960E3a9bbCeaE22651E88158d2791550",
             "usdc": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
-        }
+        },
         polygon: {
             "matic": "0x0000000000000000000000000000000000000000",
             "ghst": "0x385Eeac5cB85A38A9a07A70c73e0a3271CfB54A7",
@@ -189,7 +185,7 @@ document.addEventListener("DOMContentLoaded", function() {
         provider = null;
         web3 = null;
         connectedAccount = "";
-        document.querySelector('#connectWallet').classList.remove('hidden');
+        document.querySelector('#connectWalletButton').classList.remove('hidden');
         document.querySelector('#connectedWallet').classList.add('hidden');
     }
 
@@ -197,38 +193,33 @@ document.addEventListener("DOMContentLoaded", function() {
         let message = document.getElementById("message").value;
         let amount = document.getElementById('amount').value == '' ? '1': document.getElementById("amount").value;
         let tokenAddress = tokenAddresses[selectedNetwork.toLowerCase()][selectedToken.toLowerCase()];
-        console.log(message, amount, tokenAddress, assetId)
+        console.log(message, amount, tokenAddress)
 
         let amountInteger;
         let amountNormal;
 
-        if (typeof(assetId) !== 'undefined') {
-            amountInteger = '1'
-            amountNormal = '1'
-        } else {
-            let calculated = await calculateAmount(tokenAddress, amount, selectedNetwork.toLowerCase());
-            amountInteger = calculated.integer;
-            amountNormal = calculated.normal
-        }
+        let calculated = await calculateAmount(tokenAddress, amount, selectedNetwork.toLowerCase());
+        amountInteger = calculated.integer;
+        amountNormal = calculated.normal
         
 
         console.log("Calculate amount result")
         console.log(amountInteger.toString(), amountNormal.toString())
-        await callDonationFunction(amountInteger.toString(), message, tokenAddress, assetId);
+        await callDonationFunction(amountInteger.toString(), message, tokenAddress);
     }
 
     async function calculateAmount(_assetAddr, _amount, _network) {
         let BN = web3Base.utils.BN;
         let priceSt;
 
-        let decimals = coingeckoId[_network][_assetAddr][1];
-        let response = await (await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoId[_network][_assetAddr][0]}&vs_currencies=USD`)).json();
-        priceSt = Object.values(Object.values(response)[0])[0].toString();
+        let decimals = portal_fi[_network.toLowerCase()][_assetAddr][1];
+        let response = await (await fetch(`https://api.portals.fi/v2/tokens?ids=${portal_fi[_network.toLowerCase()][_assetAddr][0]}`)).json();
+        priceSt = response['tokens'][0]['price'];
         console.log(priceSt, decimals)
 
         let ten = new BN(10);
         let base = ten.pow(new BN(decimals));
-        let integer = await getAmount(_amount.toString(), priceSt, decimals);
+        let integer = await getAmount(_amount.toString(), priceSt.toString(), decimals);
         let normal = integer.div(base)
         return { integer, normal };
     }
@@ -238,7 +229,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const ten = new BN(10);
         let decimalsTemp = new BN(decimals)
         let baseTemp = ten.pow(new BN(decimalsTemp));
-
+        console.log(tokenPrice, tokenPrice.toString())
         let decimalCountPrice = tokenPrice.includes('.') ? tokenPrice.split('.')[1].length : 0;
         let multiplierPrice = Math.pow(10, decimalCountPrice) || 1;
         let tokenPriceToInt = new BN(tokenPrice.replace('.', ''));
@@ -246,7 +237,6 @@ document.addEventListener("DOMContentLoaded", function() {
         let decimalCountValue = amount.includes('.') ? amount.split('.')[1].length : 0;
         let multiplierValue = Math.pow(10, decimalCountValue) || 1;
         let tokenValueToInt = new BN(amount.replace('.', ''));
-
 
         console.log(decimalCountValue)
         let retVal = (new BN(multiplierPrice.toString())).mul(baseTemp).mul(tokenValueToInt).div(tokenPriceToInt).div(new BN(multiplierValue.toString()))
@@ -262,13 +252,16 @@ document.addEventListener("DOMContentLoaded", function() {
         // Get network ID for desired network
         let desiredNetworkId;
         switch (networkName.toLowerCase()) {
+        case "ethereum":
+            desiredNetworkId = 1;
+            break;
+        case "polygon":
+            desiredNetworkId = 137;
+            break;
         case "base":
             // Mainnet: 8453
             // Testnet: 84531
             desiredNetworkId = 8453;
-            break;
-        case "zora":
-            desiredNetworkId = 999;
             break;
         default:
             throw new Error("Invalid network name");
@@ -280,14 +273,14 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    async function callDonationFunction(amount, message, assetAddr, assetId=0) {
-        console.log(amount, message, assetAddr, assetId)
+    async function callDonationFunction(amount, message, assetAddr) {
+        console.log(amount, message, assetAddr)
 
         let BN = web3Base.utils.BN;
 
         await switchNetwork(web3, selectedNetwork.toLowerCase(), provider);
     
-        const contractInstance = await new web3.eth.Contract(abiPlayPal, playPalAddresses[selectedNetwork.toLowerCase()]);
+        const contractInstance = await new web3.eth.Contract(abiTippingOG, tippingAddresses[selectedNetwork.toLowerCase()]);
     
         let gas;
         let gasPrice;
@@ -297,34 +290,30 @@ document.addEventListener("DOMContentLoaded", function() {
         } catch (e) {
             console.log("Could not estimate gas price: ", e)
         }
-    
+        console.log("sending transactions through: ", contractInstance, "with gas: ", gasPrice)
         switch (assetAddr.toLowerCase()) {
             case "0x0000000000000000000000000000000000000000":
                 console.log("Sending native token")
-                gas = await contractInstance.methods.donate(streamerAddress, message).estimateGas({from: connectedAccount, value: amount.toString()});
-                result = await contractInstance.methods.donate(streamerAddress, message).send({ from: connectedAccount, value: amount.toString(), gas: gas, gasPrice: gasPrice });
+                gas = await contractInstance.methods.sendTo(streamerAddress, amount.toString(), message).estimateGas({from: connectedAccount, value: amount.toString()});
+                result = await contractInstance.methods.sendTo(streamerAddress, amount.toString(), message).send({ from: connectedAccount, value: amount.toString(), gas: gas, gasPrice: gasPrice });
             break;
             default:
-                if (assetId==0 || typeof(assetId) == 'undefined'){
-                    console.log("Sending erc20")
-                    const tokenContract = new web3.eth.Contract(ERC20Abi, assetAddr);
-                    const allowance = await tokenContract.methods.allowance(connectedAccount, playPalAddresses[selectedNetwork.toLowerCase()]).call()
-                    const allowanceBN = new BN(allowance)
-                    const amountBN = new BN(amount)
-                    if (allowanceBN.lte(amountBN)) {
-                        let approval = await tokenContract.methods
-                            .approve(playPalAddresses[selectedNetwork.toLowerCase()], BigNumber.from(amount).toString())
-                            .send({
-                                from: connectedAccount,
-                                gasPrice: gasPrice
-                            })
-                    }
-                    gas = await contractInstance.methods.donateToken(streamerAddress, amount.toString(), assetAddr, message).estimateGas({from: connectedAccount, value: 0});
-                    result = await contractInstance.methods.donateToken(streamerAddress, amount.toString(), assetAddr, message).send({ from: connectedAccount, value: 0, gas: gas, gasPrice: gasPrice });
-                } else {
-                    // Future NFT sending flow
-                    continue
+                console.log("Sending erc20")
+                const tokenContract = new web3.eth.Contract(ERC20Abi, assetAddr);
+                const allowance = await tokenContract.methods.allowance(connectedAccount, tippingAddresses[selectedNetwork.toLowerCase()]).call()
+                const allowanceBN = new BN(allowance)
+                const amountBN = new BN(amount)
+                console.log("sending amount: ", amountBN.toString())
+                if (allowanceBN.lte(amountBN)) {
+                    let approval = await tokenContract.methods
+                        .approve(tippingAddresses[selectedNetwork.toLowerCase()], amountBN.toString())
+                        .send({
+                            from: connectedAccount,
+                            gasPrice: gasPrice
+                        })
                 }
+                gas = await contractInstance.methods.sendTokenTo(streamerAddress, amount.toString(), assetAddr, message).estimateGas({from: connectedAccount, value: 0});
+                result = await contractInstance.methods.sendTokenTo(streamerAddress, amount.toString(), assetAddr, message).send({ from: connectedAccount, value: 0, gas: gas, gasPrice: gasPrice });
             throw new Error("Invalid network name");
         }
 

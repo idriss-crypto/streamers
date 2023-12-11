@@ -1,7 +1,6 @@
 let streamerAddress ;
 let name;
 let currBlockBase;
-let currBlockOP;
 let currBlockEthereum;
 let currBlockPolygon;
 let tippingBase;
@@ -22,9 +21,10 @@ let abiTippingBase = [{"inputs":[{"internalType":"address","name":"_nativeUsdAgg
 let tippingAddressBase = "0x324Ad1738B9308D5AF5E81eDd6389BFa082a8968";
 let tippingAddressEthereum = "0xe18036D7E3377801a19d5Db3f9b236617979674E";
 let tippingAddressPolygon = "0xe35B356ac2c880cCcc769bA9393F0748d94ABBCa";
+let NULL_ADDR = "0x0000000000000000000000000000000000000000";
 
 const web3Base = new Web3(new Web3.providers.HttpProvider("https://mainnet.base.org"));
-const web3Ethereum = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/v3/"));
+const web3Ethereum = new Web3(new Web3.providers.HttpProvider("https://eth.llamarpc.com"));
 const web3Polygon = new Web3(new Web3.providers.HttpProvider("https://polygon-rpc.com/"));
 
 
@@ -38,7 +38,7 @@ let portal_fi = {
         "0xb23d80f5fefcddaa212212f028021b41ded428cf": ["ethereum:0xb23d80f5fefcddaa212212f028021b41ded428cf", 18],
         "0x3F382DbD960E3a9bbCeaE22651E88158d2791550": ["ethereum:0x3F382DbD960E3a9bbCeaE22651E88158d2791550", 18],
         "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48": ["ethereum:0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", 6]
-    }
+    },
     polygon: {
         "0x0000000000000000000000000000000000000000": ["polygon:0x0000000000000000000000000000000000000000", 18],
         "0x385Eeac5cB85A38A9a07A70c73e0a3271CfB54A7": ["polygon:0x385Eeac5cB85A38A9a07A70c73e0a3271CfB54A7", 18]
@@ -61,8 +61,8 @@ async function loadTippingContracts() {
 async function setCurrBlock() {
     currBlockBase = await web3Base.eth.getBlockNumber();
     currBlockEthereum = await web3Ethereum.eth.getBlockNumber();
-    currBlockPolygon = await web3Polygon.eth.getBlockNumber();
-    // currBlockBase = 8235798 ;
+//    currBlockPolygon = await web3Polygon.eth.getBlockNumber();
+    currBlockPolygon = 51018860;
 }
 
 
@@ -75,6 +75,10 @@ async function getInputs(_method, _remove) {
                 {
                     type: "address",
                     name: "_recipient",
+                },
+                {
+                    type: "uint256",
+                    name: "_amount"
                 },
                 {
                     type: "string",
@@ -128,19 +132,17 @@ async function fetchDonations() {
         },
     });
     for (let i = 0; i < eventsBase.length; i++) {
-        console.log(eventsBase[i])
         if (!txnHashes.includes(eventsBase[i].transactionHash)) {
             txn = await web3Base.eth.getTransaction(eventsBase[i].transactionHash);
             from_ = txn.from;
             let method = txn.input.slice(2, 10);
             let remove = txn.input.replace(method, "");
             let inputs = await getInputs(method, remove);
-            console.log(inputs)
             let tempRet = {
-                amount: eventsBase[i].returnValues._amount,
-                tokenAddress: eventsBase[i].returnValues._tokenContractAddr,
+                amount: inputs._amount,
+                tokenAddress: eventsBase[i].returnValues.tokenAddress,
                 tokenId : inputs._assetId,
-                message: eventsBase[i].returnValues._message,
+                message: eventsBase[i].returnValues.message,
                 fromAddress: from_,
                 network: "base"
             }
@@ -150,6 +152,8 @@ async function fetchDonations() {
         }
     }
 
+    console.log("Searching on eth from block: ", currBlockEthereum);
+
     eventsEthereum = await tippingEthereum.getPastEvents("TipMessage", {
         fromBlock: currBlockEthereum - 5,
         filter: {
@@ -157,19 +161,17 @@ async function fetchDonations() {
         },
     });
     for (let i = 0; i < eventsEthereum.length; i++) {
-        console.log(eventsEthereum[i])
         if (!txnHashes.includes(eventsEthereum[i].transactionHash)) {
             txn = await web3Ethereum.eth.getTransaction(eventsEthereum[i].transactionHash);
             from_ = txn.from;
             let method = txn.input.slice(2, 10);
             let remove = txn.input.replace(method, "");
             let inputs = await getInputs(method, remove);
-            console.log(inputs)
             let tempRet = {
-                amount: eventsEthereum[i].returnValues._amount,
-                tokenAddress: eventsEthereum[i].returnValues._tokenContractAddr,
+                amount: inputs._amount,
+                tokenAddress: eventsEthereum[i].returnValues.tokenAddress,
                 tokenId : inputs._assetId,
-                message: eventsEthereum[i].returnValues._message,
+                message: eventsEthereum[i].returnValues.message,
                 fromAddress: from_,
                 network: "ethereum"
             }
@@ -179,6 +181,7 @@ async function fetchDonations() {
         }
     }
 
+    console.log("Searching on poly from block: ", currBlockPolygon);
     eventsPolygon = await tippingPolygon.getPastEvents("TipMessage", {
         fromBlock: currBlockPolygon - 5,
         filter: {
@@ -186,19 +189,17 @@ async function fetchDonations() {
         },
     });
     for (let i = 0; i < eventsPolygon.length; i++) {
-        console.log(eventsPolygon[i])
         if (!txnHashes.includes(eventsPolygon[i].transactionHash)) {
             txn = await web3Polygon.eth.getTransaction(eventsPolygon[i].transactionHash);
             from_ = txn.from;
             let method = txn.input.slice(2, 10);
             let remove = txn.input.replace(method, "");
             let inputs = await getInputs(method, remove);
-            console.log(inputs)
             let tempRet = {
-                amount: eventsPolygon[i].returnValues._amount,
-                tokenAddress: eventsPolygon[i].returnValues._assetContractAddress,
+                amount: inputs._amount,
+                tokenAddress: eventsPolygon[i].returnValues.tokenAddress,
                 tokenId : inputs._assetId,
-                message: eventsPolygon[i].returnValues._message,
+                message: eventsPolygon[i].returnValues.message,
                 fromAddress: from_,
                 network: "polygon"
             }
@@ -229,22 +230,21 @@ async function calculateDollar(_assetAddr, _amount, _network) {
 
 interval = setInterval(async function () {
     ret = await fetchDonations();
-    console.log(ret);
     retString = "";
     for (let i = 0; i < ret.length; i++) {
-        let nftImgSrc;
-    
+
         fromAccount = ret[i].fromAddress;
          //add some prettify for addr
         if (typeof(ret[i].tokenId) == "undefined") {
             basicInfo = fromAccount.substring(0, 6).concat("...").concat(fromAccount.substr(-4)) + " tipped you " + "$" + (await calculateDollar(ret[i].tokenAddress, ret[i].amount, ret[i].network.toLowerCase()));
+            console.log(basicInfo)
         } else {
             continue
         }
         
         message = ret[i].message;
 
-        resTip.push([basicInfo, message, nftImgSrc]);
+        resTip.push([basicInfo, message]);
     }
 
 }, 5000);
@@ -254,18 +254,11 @@ displayAlerts = setInterval(async function () {
         if (document.getElementById('fader').style.opacity == 0) {
             document.getElementById("baseInfo").innerHTML = resTip[0][0];
             document.getElementById("message").innerHTML = resTip[0][1];
-            if (typeof(resTip[0][2]) !== 'undefined') {
-                // Future: show NFT metadata
-                document.getElementById("nftImg").src = resTip[0][2];
-                document.getElementById("nftImg").style.display = "";
-            }
             document.getElementById('fader').style.opacity = 1;
-            console.log(document.getElementById("donationAlert").style.display);
             resTip.shift();
             console.log("timeout start")
             await setTimeout(function () {
                 document.getElementById('fader').style.opacity = 0;
-                document.getElementById("nftImg").style.display = "none";
             }, 5000);
             console.log("timeout end")
         }
@@ -273,7 +266,7 @@ displayAlerts = setInterval(async function () {
 }, 2000);
 
 async function init() {
-    await loadPlayPalContracts();
+    await loadTippingContracts();
     await setCurrBlock();
     txnHashes = new Array();
 }
