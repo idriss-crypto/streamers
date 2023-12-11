@@ -36,12 +36,23 @@ document.addEventListener("DOMContentLoaded", function() {
         tokenParams = "";
     }
 
+    const tokenNetworkCombinations = {
+        base: ["ETH", "PRIME"],
+        ethereum: ["ETH", "USDC", "PRIME", "GHST"],
+        polygon: ["MATIC", "USDC", "GHST"]
+    }
     let availableTokens = {};
+
+    function intersect(array1, array2) {
+        return array1.filter(element => array2.includes(element));
+    }
 
     if (networkParamsArray.length > 0 && tokenParamsArray.length > 0) {
         networkParamsArray.forEach(network_ => {
-            if (network_.toLowerCase()==="base") availableTokens[network_.toLowerCase()] = tokenParamsArray;
-            else availableTokens[network_.toLowerCase()] = [tokenParamsArray[0]];
+
+            const intersection = intersect(tokenParamsArray, tokenNetworkCombinations[network_.toLowerCase()]);
+
+            availableTokens[network_.toLowerCase()] = intersection;
         });
     }
     console.log(availableTokens)
@@ -74,7 +85,6 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log("Selected token:", selectedToken);
     });
 
-    // ToDo: add token availability filter
     function populateTokenOptions(network_) {
         tokenSelect.innerHTML = "";     
         console.log("Updating with network ", network_)
@@ -145,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // ToDo: change PRIME address
+
     let tokenAddresses = {
         base: {
             "eth": "0x0000000000000000000000000000000000000000",
