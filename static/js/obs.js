@@ -46,10 +46,12 @@ let coingeckoId = {
         "0x0000000000000000000000000000000000000000": ["ethereum", 18],
         "0xb23d80f5fefcddaa212212f028021b41ded428cf": ["echelon-prime", 18]
         "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48": ["usdc", 6]
+        "0x3F382DbD960E3a9bbCeaE22651E88158d2791550": ["ghst", 18]
     },
     "polygon": {
         "0x0000000000000000000000000000000000000000": ["matic", 18]
         "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174": ["usdc", 6]
+        "0x385Eeac5cB85A38A9a07A70c73e0a3271CfB54A7": ["ghst", 18]
     }
 };
 
@@ -76,14 +78,15 @@ async function setCurrBlock() {
 }
 
 
-// ToDo: check correct TipMessage event inputs
+// Only support native and erc20 transfer fetching for now
 async function getInputs(_method, _remove) {
-    if (_method == "429c14d7") {
+    // OG/OP/Base sendTo()
+    if (_method == "16e49145") {
         return await web3Base.eth.abi.decodeParameters(
             [
                 {
                     type: "address",
-                    name: "_streamer",
+                    name: "_recipient",
                 },
                 {
                     type: "string",
@@ -92,12 +95,13 @@ async function getInputs(_method, _remove) {
             ],
             _remove
         );
-    } else if (_method == "37adfb6c") {
+    // OG/OP sendTokenTo()
+    } else if (_method == "41dfeca5") {
         return await web3Base.eth.abi.decodeParameters(
             [
                 {
                     type: "address",
-                    name: "_streamer",
+                    name: "_recipient",
                 },
                 {
                     type: "uint256",
@@ -105,33 +109,7 @@ async function getInputs(_method, _remove) {
                 },
                 {
                     type: "address",
-                    name: "_tokenAddr",
-                },
-                {
-                    type: "string",
-                    name: "_message",
-                },
-            ],
-            _remove
-        );
-    } else if (_method == "2c875abc") {
-        return await web3Base.eth.abi.decodeParameters(
-            [
-                {
-                    type: "address",
-                    name: "_streamer",
-                },
-                {
-                    type: "uint256",
-                    name: "_assetId",
-                },
-                {
-                    type: "uint256",
-                    name: "_amount",
-                },
-                {
-                    type: "address",
-                    name: "_nftAddress",
+                    name: "_tokenContractAddr",
                 },
                 {
                     type: "string",

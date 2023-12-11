@@ -10,7 +10,7 @@ let tokenParams;
 let networkParamsArray;
 let tokenParamsArray;
 let assetId;
-let selctedNFT;
+let selectedNFT;
 let assetAddress;
 
 document.addEventListener("DOMContentLoaded", function() {
