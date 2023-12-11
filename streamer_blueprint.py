@@ -6,22 +6,22 @@ streamer_blueprint = Blueprint('streamer', __name__,
                                static_url_path='/frontends/static')
 
 
-@streamer_blueprint.route('/streamer')
+@streamer_blueprint.route('/streamers')
 def submodule_index():
     return render_template('streamerPage.html')
 
 
-@streamer_blueprint.route("/obs", methods=["GET"])
+@streamer_blueprint.route("/streamers/obs", methods=["GET"])
 def streamer_obs():
     return render_template('obs.html')
 
 
-@streamer_blueprint.route("/donorPage", methods=["GET"])
+@streamer_blueprint.route("/streamers/donate", methods=["GET"])
 def streamer_donate():
     return render_template('donorPage.html')
 
 
-@streamer_blueprint.route("/preview", methods=["GET"])
+@streamer_blueprint.route("/streamers/preview", methods=["GET"])
 def obs_preview():
     return render_template('donorPage.html')
 
