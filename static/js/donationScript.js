@@ -66,11 +66,11 @@ document.addEventListener("DOMContentLoaded", async function() {
     tokenParams = urlParams.get('token');
     streamerAddress = urlParams.get('streamerAddress');
     if (!web3Ethereum.utils.isAddress(streamerAddress)) {
-
+        console.log("not an address")
         let resolvedAddress = await resolveENS(streamerAddress, web3Ethereum)
         if (!resolvedAddress.address) resolvedAddress = await resolveIDriss(streamerAddress, idriss);
         streamerAddress = resolvedAddress.address
-
+        console.log(streamerAddress, resolvedAddress)
     }
     console.log(streamerAddress)
     if (networkParams && networkParams.length > 0) {
