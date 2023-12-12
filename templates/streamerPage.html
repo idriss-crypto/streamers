@@ -154,7 +154,7 @@
                 <div class="relative group">
                     <img class="h-auto opacity-10 group-hover:opacity-100 max-w-full rounded" src="{{ url_for('.static', filename='images/Banner_4.png') }}" alt="" />
                     <a
-                        href="{{ url_for('.static', filename='images/Banner41.png') }}"
+                        href="{{ url_for('.static', filename='images/Banner_4.png') }}"
                         download="Banner_4.png"
                         class="absolute bottom-4 right-4 transform translate-x-1/2 translate-y-1/2 bg-gray-50 rounded text-gray-500 p-1 opacity-0 group-hover:opacity-100 hover:cursor-pointer"
                     >
@@ -274,6 +274,8 @@
             </div>
         </div>
         <!-- SCRIPT -->
+        <script src="https://unpkg.com/idriss-crypto/lib/bundle/global.js"></script>
+        <script type="text/javascript" src="{{ url_for('.static', filename='../static/js/web3.min.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('.static', filename='../static/js/streamerScript.js') }}"></script>
     </body>
 </html>
