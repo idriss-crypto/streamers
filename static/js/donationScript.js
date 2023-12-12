@@ -13,15 +13,17 @@ let idriss;
 
 let EXPLORER_LINK = "https://basescan.org/"
 
-document.addEventListener("DOMContentLoaded", function() {
-
-    const tokenNetworkCombinations = {
+const tokenNetworkCombinations = {
         base: ["ETH", "PRIME"],
         ethereum: ["ETH", "USDC", "PRIME", "GHST"],
         polygon: ["MATIC", "USDC", "GHST"]
     }
-    let availableTokens = {};
+let availableTokens = {};
+
+document.addEventListener("DOMContentLoaded", function() {
     idriss = new IdrissCrypto.IdrissCrypto();
+
+    console.log(idriss)
 
     const urlParams = new URLSearchParams(window.location.search);
     networkParams = urlParams.get('network');
