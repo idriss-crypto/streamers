@@ -6,11 +6,13 @@ let currBlockPolygon;
 let tippingBase;
 let tippingEthereum;
 let tippingPolygon;
+let idriss;
 let txnHashes = new Array();
 let resTip = new Array();
 
 document.addEventListener("DOMContentLoaded", function() {
     const urlParams = new URLSearchParams(window.location.search);
+    idriss = new IdrissCrypto.IdrissCrypto();
 
     streamerAddress = urlParams.get('streamerAddress');
 });
@@ -61,8 +63,8 @@ async function loadTippingContracts() {
 async function setCurrBlock() {
     currBlockBase = await web3Base.eth.getBlockNumber();
     currBlockEthereum = await web3Ethereum.eth.getBlockNumber();
-//    currBlockPolygon = await web3Polygon.eth.getBlockNumber();
-    currBlockPolygon = 51018860;
+    currBlockPolygon = await web3Polygon.eth.getBlockNumber();
+//    currBlockPolygon = 51018860;
 }
 
 
@@ -236,14 +238,17 @@ interval = setInterval(async function () {
         fromAccount = ret[i].fromAddress;
          //add some prettify for addr
         if (typeof(ret[i].tokenId) == "undefined") {
-            basicInfo = fromAccount.substring(0, 6).concat("...").concat(fromAccount.substr(-4)) + " tipped you " + "$" + (await calculateDollar(ret[i].tokenAddress, ret[i].amount, ret[i].network.toLowerCase()));
+
+            let reverse = await idriss.reverseResolve(fromAccount);
+            fromAccountIdentifier = reverse ? reverse : fromAccount.substring(0, 4).concat("...").concat(fromAccount.substr(-2));
+            basicInfo = fromAccountIdentifier + " sent " + "$" + (await calculateDollar(ret[i].tokenAddress, ret[i].amount, ret[i].network.toLowerCase()));
             console.log(basicInfo)
         } else {
             continue
         }
         
         message = ret[i].message;
-
+        console.log(message)
         resTip.push([basicInfo, message]);
     }
 

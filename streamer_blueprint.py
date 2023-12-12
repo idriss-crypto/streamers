@@ -23,5 +23,5 @@ def streamer_donate():
 
 @streamer_blueprint.route("/streamers/preview", methods=["GET"])
 def obs_preview():
-    return render_template('donorPage.html')
+    return render_template('obsPreview.html')
 

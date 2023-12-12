@@ -15,8 +15,13 @@ let EXPLORER_LINK = "https://basescan.org/"
 
 document.addEventListener("DOMContentLoaded", function() {
 
+    const tokenNetworkCombinations = {
+        base: ["ETH", "PRIME"],
+        ethereum: ["ETH", "USDC", "PRIME", "GHST"],
+        polygon: ["MATIC", "USDC", "GHST"]
+    }
+    let availableTokens = {};
     idriss = new IdrissCrypto.IdrissCrypto();
-    console.log(idriss)
 
     const urlParams = new URLSearchParams(window.location.search);
     networkParams = urlParams.get('network');
@@ -24,24 +29,15 @@ document.addEventListener("DOMContentLoaded", function() {
     streamerAddress = urlParams.get('streamerAddress');
     if (networkParams && networkParams.length > 0) {
         networkParamsArray = networkParams.split(",")
-        selectedNetwork = networkParamsArray[0];
     } else {
         networkParams = "";
     }
 
     if (tokenParams && tokenParams.length > 0) {
         tokenParamsArray = tokenParams.split(",")
-        selectedToken = tokenParamsArray[0];
     } else {
         tokenParams = "";
     }
-
-    const tokenNetworkCombinations = {
-        base: ["ETH", "PRIME"],
-        ethereum: ["ETH", "USDC", "PRIME", "GHST"],
-        polygon: ["MATIC", "USDC", "GHST"]
-    }
-    let availableTokens = {};
 
     function intersect(array1, array2) {
         return array1.filter(element => array2.includes(element));
@@ -49,10 +45,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (networkParamsArray.length > 0 && tokenParamsArray.length > 0) {
         networkParamsArray.forEach(network_ => {
-
             const intersection = intersect(tokenParamsArray, tokenNetworkCombinations[network_.toLowerCase()]);
-
-            availableTokens[network_.toLowerCase()] = intersection;
+            if (intersection.length > 0) {
+                if (!selectedNetwork) selectedNetwork = network_;
+                if (!selectedToken) selectedToken = intersection[0];
+                console.log(intersection)
+                availableTokens[network_.toLowerCase()] = intersection;
+            }
         });
     }
     console.log(availableTokens)
@@ -65,10 +64,13 @@ document.addEventListener("DOMContentLoaded", function() {
     if (networkParams.length > 0) {
         networkSelect.innerHTML = '';
         networkParamsArray.forEach(network_ => {
+
+            if(availableTokens[network_.toLowerCase()]) {
             const option = document.createElement("option");
             option.value = network_;
             option.text = network_;
             networkSelect.appendChild(option);
+            }
         });
     }
 
