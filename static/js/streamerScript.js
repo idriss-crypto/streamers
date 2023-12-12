@@ -45,10 +45,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const web3Ethereum = new Web3(new Web3.providers.HttpProvider("https://eth.llamarpc.com"));
     idriss = new IdrissCrypto.IdrissCrypto();
-
     
     generateUrlButton.addEventListener("click", async function(event) {
-        let inputAddress = walletAddressInput.value;
+        let inputAddress = walletAddressInput.value.replace(" ", "");
 
         const selectedNetworks = Array.from(donationNetworksCheckboxes)
             .filter(checkbox => checkbox.checked)
@@ -70,7 +69,6 @@ document.addEventListener("DOMContentLoaded", function() {
             let resolvedAddress = await resolveENS(inputAddress, web3Ethereum)
             if (!resolvedAddress.address) resolvedAddress = await resolveIDriss(inputAddress, idriss);
             if (!resolvedAddress.address) {
-
                 addressError.classList.remove("hidden");
                 return
             }
@@ -100,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     generateSnippetButton.addEventListener("click", async function(event) {
-        let inputAddress = walletAddressInput.value;
+        let inputAddress = walletAddressInput.value.replace(" ", "");
 
         const selectedNetworks = Array.from(donationNetworksCheckboxes)
             .filter(checkbox => checkbox.checked)
@@ -126,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 return
             }
             addressError.classList.add("hidden");
-            inputAddress = resolvedAddress.address;
+//            inputAddress = resolvedAddress.address;
         }
 
 

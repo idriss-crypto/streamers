@@ -13,6 +13,40 @@ let idriss;
 
 let EXPLORER_LINK = "https://basescan.org/"
 
+async function resolveENS(identifier, web3) {
+    try {
+        if (web3.utils.isAddress(identifier)) {
+            const ensName = await fetch(`https://www.idriss.xyz/v1/ENS-Addresses?identifer=${identifier}`)
+            return { address: identifier, ens: ensName }
+        } else {
+            const resolvedAddress = await web3.eth.ens.getAddress(identifier);
+            return { address: resolvedAddress, ens: identifier }
+        }
+    } catch (error) {
+        return {}
+    }
+}
+
+async function resolveIDriss(identifier, idriss) {
+    try {
+        if (!(await idriss.web3Promise).utils.isAddress(identifier)) {
+            let idrissAddress = await idriss.resolve(identifier, {network:"evm"});
+            if (Object.values(idrissAddress).length > 0) {
+                idrissAddress = idrissAddress["Public ETH"] ?? Object.values(idrissAddress)[0]
+                return { address: idrissAddress, idriss: identifier }
+            } else {
+                return { address: null, idriss: identifier }
+            }
+        } else {
+            const idrissName = await idriss.reverseResolve(identifier);
+            return { address: identifier, idriss: idrissName }
+        }
+    } catch (error) {
+        return {}
+    }
+}
+
+
 const tokenNetworkCombinations = {
         base: ["ETH", "PRIME"],
         ethereum: ["ETH", "USDC", "PRIME", "GHST"],
@@ -20,15 +54,25 @@ const tokenNetworkCombinations = {
     }
 let availableTokens = {};
 
-document.addEventListener("DOMContentLoaded", function() {
-    idriss = new IdrissCrypto.IdrissCrypto();
+document.addEventListener("DOMContentLoaded", async function() {
+    const web3Base = new Web3(new Web3.providers.HttpProvider("https://mainnet.base.org"));
+    const web3Ethereum = new Web3(new Web3.providers.HttpProvider("https://eth.llamarpc.com"));
+    const web3Polygon = new Web3(new Web3.providers.HttpProvider("https://polygon-rpc.com/"));
 
-    console.log(idriss)
+    idriss = new IdrissCrypto.IdrissCrypto();
 
     const urlParams = new URLSearchParams(window.location.search);
     networkParams = urlParams.get('network');
     tokenParams = urlParams.get('token');
     streamerAddress = urlParams.get('streamerAddress');
+    if (!web3Ethereum.utils.isAddress(streamerAddress)) {
+
+        let resolvedAddress = await resolveENS(streamerAddress, web3Ethereum)
+        if (!resolvedAddress.address) resolvedAddress = await resolveIDriss(streamerAddress, idriss);
+        streamerAddress = resolvedAddress.address
+
+    }
+    console.log(streamerAddress)
     if (networkParams && networkParams.length > 0) {
         networkParamsArray = networkParams.split(",")
     } else {
@@ -136,10 +180,6 @@ document.addEventListener("DOMContentLoaded", function() {
         "polygon": tippingAddressPolygon
     }
     const ERC20Abi = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"}];
-
-    const web3Base = new Web3(new Web3.providers.HttpProvider("https://mainnet.base.org"));
-    const web3Ethereum = new Web3(new Web3.providers.HttpProvider("https://eth.llamarpc.com"));
-    const web3Polygon = new Web3(new Web3.providers.HttpProvider("https://polygon-rpc.com/"));
 
     let portal_fi = {
         base: {

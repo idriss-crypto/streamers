@@ -10,6 +10,39 @@ let idriss;
 let txnHashes = new Array();
 let resTip = new Array();
 
+async function resolveENS(identifier, web3) {
+    try {
+        if (web3.utils.isAddress(identifier)) {
+            const ensName = await fetch(`https://www.idriss.xyz/v1/ENS-Addresses?identifer=${identifier}`)
+            return { address: identifier, ens: ensName }
+        } else {
+            const resolvedAddress = await web3.eth.ens.getAddress(identifier);
+            return { address: resolvedAddress, ens: identifier }
+        }
+    } catch (error) {
+        return {}
+    }
+}
+
+async function resolveIDriss(identifier, idriss) {
+    try {
+        if (!(await idriss.web3Promise).utils.isAddress(identifier)) {
+            let idrissAddress = await idriss.resolve(identifier, {network:"evm"});
+            if (Object.values(idrissAddress).length > 0) {
+                idrissAddress = idrissAddress["Public ETH"] ?? Object.values(idrissAddress)[0]
+                return { address: idrissAddress, idriss: identifier }
+            } else {
+                return { address: null, idriss: identifier }
+            }
+        } else {
+            const idrissName = await idriss.reverseResolve(identifier);
+            return { address: identifier, idriss: idrissName }
+        }
+    } catch (error) {
+        return {}
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     const urlParams = new URLSearchParams(window.location.search);
     idriss = new IdrissCrypto.IdrissCrypto();
@@ -240,6 +273,7 @@ interval = setInterval(async function () {
         if (typeof(ret[i].tokenId) == "undefined") {
 
             let reverse = await idriss.reverseResolve(fromAccount);
+            if (!reverse) reverse = (await resolveENS(fromAccount, web3Ethereum)).ens;
             fromAccountIdentifier = reverse ? reverse : fromAccount.substring(0, 4).concat("...").concat(fromAccount.substr(-2));
             basicInfo = fromAccountIdentifier + " sent " + "$" + (await calculateDollar(ret[i].tokenAddress, ret[i].amount, ret[i].network.toLowerCase()));
             console.log(basicInfo)
