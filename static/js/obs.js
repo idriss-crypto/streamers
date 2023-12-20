@@ -276,7 +276,6 @@ interval = setInterval(async function () {
             if (!reverse) reverse = (await resolveENS(fromAccount, web3Ethereum)).ens;
             fromAccountIdentifier = reverse ? reverse : fromAccount.substring(0, 4).concat("...").concat(fromAccount.substr(-2));
             basicInfo = fromAccountIdentifier + " sent " + "$" + (await calculateDollar(ret[i].tokenAddress, ret[i].amount, ret[i].network.toLowerCase()));
-            console.log(basicInfo)
         } else {
             continue
         }
@@ -298,7 +297,7 @@ displayAlerts = setInterval(async function () {
             console.log("timeout start")
             await setTimeout(function () {
                 document.getElementById('fader').style.opacity = 0;
-            }, 5000);
+            }, 10000);
             console.log("timeout end")
         }
     }

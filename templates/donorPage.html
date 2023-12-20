@@ -58,7 +58,6 @@
                                         value="Connect Wallet"
                                         class="w-10/12 sm:w-full ml-6 sm:ml-4 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-[#11dd74] hover:bg-[#11cc74] hover:cursor-pointer"
                                     />
-                                    <!-- LENNARD: THIS NEEDS THE LOGIC FROM IDRISS SEND TO DISPLAY CONNECTED ADDRESS ETC. ALL IDs ARE FROM IDRISS SEND -->
                                     <div
                                         id="connectedWallet"
                                         class="hidden flex w-10/12 sm:w-full ml-6 sm:ml-4 whitespace-nowrap inline-flex items-center justify-center px-2 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-gray-900"
@@ -116,8 +115,16 @@
                 <a href="https://docs.idriss.xyz/user-guides/protocol-fees" target="_blank" class="underline text-[#5865F2]" rel="noopener noreferrer">1% supplies IDriss' treasury</a>
             </p>
         </div>
+        <!-- POPUP -->
+        <div class="hidden lg:block group fixed w-11/12 w-auto mx-auto z-10 bottom-16 lg:bottom-3 right-1/2 lg:right-4 transform translate-x-1/2 lg:translate-x-0">
+          <div class="bg-white rounded-lg shadow-md p-3 text-center group group-hover:bg-indigo-50">
+            <a href="/streamers" target="_blank" class="whitespace-nowrap items-center justify-center border border-transparent text-base font-medium rounded-md text-[#5865F2] bg-white group-hover:bg-indigo-50" rel="noopener noreferrer">
+              Create your donation link
+            </a>
+          </div>
+        </div>
         <!-- FOOTER -->
-        <div class="bg-white inset-x-0 bottom-0 fixed">
+        <div class="bg-transparent inset-x-0 bottom-0 fixed">
             <div class="max-w-7xl mx-auto px-4 sm:px-6">
                 <div class="items-center border-b-2 border-gray-100 py-6 md:space-x-10">
                     <nav class="flex space-x-10 justify-center">
