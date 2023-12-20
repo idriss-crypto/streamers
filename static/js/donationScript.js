@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         let priceSt;
 
         let decimals = portal_fi[_network.toLowerCase()][_assetAddr][1];
-        let response = await (await fetch(`https://api.portals.fi/v2/tokens?ids=${portal_fi[_network.toLowerCase()][_assetAddr][0]}`)).json();
+        let response = await (await fetch(`https://www.idriss.xyz/pricing?token=${portal_fi[_network.toLowerCase()][_assetAddr][0]}`)).json();
         priceSt = response['tokens'][0]['price'];
         console.log(priceSt, decimals)
 

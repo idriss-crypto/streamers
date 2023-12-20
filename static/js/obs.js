@@ -255,7 +255,7 @@ async function getVal(tippingAmount, tokenPrice, decimals) {
 
 async function calculateDollar(_assetAddr, _amount, _network) {
     let priceSt;
-    let response = await (await fetch(`https://api.portals.fi/v2/tokens?ids=${portal_fi[_network.toLowerCase()][_assetAddr][0]}`)).json();
+    let response = await (await fetch(`https://www.idriss.xyz/pricing?token=${portal_fi[_network.toLowerCase()][_assetAddr][0]}`)).json();
     priceSt = response['tokens'][0]['price'];
 
     let decimals = portal_fi[_network.toLowerCase()][_assetAddr][1];
