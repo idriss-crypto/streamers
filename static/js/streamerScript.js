@@ -16,7 +16,7 @@ async function resolveENS(identifier, web3) {
 
 async function resolveIDriss(identifier, idriss) {
     try {
-        if (!(await idriss.web3Promise).utils.isAddress(identifier)) {
+        if (!web3Ethereum.utils.isAddress(identifier)) {
             let idrissAddress = await idriss.resolve(identifier, {network:"evm"});
             if (Object.values(idrissAddress).length > 0) {
                 idrissAddress = idrissAddress["Public ETH"] ?? Object.values(idrissAddress)[0]
