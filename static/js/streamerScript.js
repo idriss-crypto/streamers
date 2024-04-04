@@ -1,41 +1,53 @@
 let idriss;
+const w3 = new Web3(new Web3.providers.HttpProvider("https://eth.llamarpc.com"));
 
 async function resolveENS(identifier, web3) {
     try {
-        if (web3.utils.isAddress(identifier)) {
-            const ensName = await fetch(`https://www.idriss.xyz/v1/ENS-Addresses?identifer=${identifier}`)
-            return { address: identifier, ens: ensName }
-        } else {
-            const resolvedAddress = await web3.eth.ens.getAddress(identifier);
-            return { address: resolvedAddress, ens: identifier }
-        }
+        return await web3.eth.ens.getAddress(identifier);
     } catch (error) {
-        return {}
+        return null;
     }
 }
 
 async function resolveIDriss(identifier, idriss) {
     try {
-        if (!web3Ethereum.utils.isAddress(identifier)) {
-            let idrissAddress = await idriss.resolve(identifier, {network:"evm"});
-            if (Object.values(idrissAddress).length > 0) {
-                idrissAddress = idrissAddress["Public ETH"] ?? Object.values(idrissAddress)[0]
-                return { address: idrissAddress, idriss: identifier }
-            } else {
-                return { address: null, idriss: identifier }
-            }
-        } else {
-            const idrissName = await idriss.reverseResolve(identifier);
-            return { address: identifier, idriss: idrissName }
-        }
+        const idrissAddress = await idriss.resolve(identifier, { network: "evm" });
+        return idrissAddress["Public ETH"] ?? Object.values(idrissAddress)[0] ?? null;
     } catch (error) {
-        return {}
+        return null;
     }
 }
 
+function openPopup(url) {
+    const urlPopup = document.getElementById("urlPopup");
+    const generatedUrlTextarea = document.getElementById("generatedUrl");
+    const copyButton = document.getElementById("copyButton");
+    const closeButton = document.getElementById("closeButton");
+
+    generatedUrlTextarea.value = url;
+    urlPopup.classList.remove("hidden");
+
+    copyButton.addEventListener("click", function() {
+        generatedUrlTextarea.select();
+        document.execCommand("copy");
+    });
+
+    closeButton.addEventListener("click", function() {
+        urlPopup.classList.add("hidden");
+    });
+}
+
+function getSelectedValues(checkboxes) {
+    return Array.from(checkboxes)
+        .filter(checkbox => checkbox.checked)
+        .map(checkbox => checkbox.value);
+}
+
 document.addEventListener("DOMContentLoaded", function() {
-    const generateUrlButton = document.getElementById("generateUrlButton");
-    const generateSnippetButton = document.getElementById("generateSnippetButton");
+    idriss = new IdrissCrypto.IdrissCrypto();
+
+    const generateObsLinkButton = document.getElementById("generateObsLinkButton");
+    const generateDonationLinkButton = document.getElementById("generateDonationLinkButton");
     const walletAddressInput = document.getElementById("walletAddress");
     const donationNetworksCheckboxes = document.querySelectorAll('input[name="donationNetworks"]');
     const donationCoinsCheckboxes = document.querySelectorAll('input[name="donationCoins"]');
@@ -43,137 +55,75 @@ document.addEventListener("DOMContentLoaded", function() {
     const coinError = document.getElementById("coinError");
     const addressError = document.getElementById("addressError");
 
-    const web3Ethereum = new Web3(new Web3.providers.HttpProvider("https://eth.llamarpc.com"));
-    idriss = new IdrissCrypto.IdrissCrypto();
+    async function preGenerate() {
+        let inputAddress = walletAddressInput.value.trim();
+
+        if (!inputAddress) {
+            addressError.classList.remove("hidden");
+            return null;
+        }
+
+        addressError.classList.add("hidden");
+
+        if (!w3.utils.isAddress(inputAddress)) {
+            let resolvedAddress = await resolveENS(inputAddress, w3) || await resolveIDriss(inputAddress, idriss);
+            console.log("resAddr", resolvedAddress)
+            if (!resolvedAddress) {
+                addressError.classList.remove("hidden");
+                return null;
+            }
+            inputAddress = resolvedAddress;
+        }
+
+        const selectedNetworks = getSelectedValues(donationNetworksCheckboxes);
+        const selectedCoins = getSelectedValues(donationCoinsCheckboxes);
     
-    generateUrlButton.addEventListener("click", async function(event) {
-        let inputAddress = walletAddressInput.value.replace(" ", "");
 
-        const selectedNetworks = Array.from(donationNetworksCheckboxes)
-            .filter(checkbox => checkbox.checked)
-            .map(checkbox => checkbox.value);
-        
-        const selectedCoins = Array.from(donationCoinsCheckboxes)
-            .filter(checkbox => checkbox.checked)
-            .map(checkbox => checkbox.value);
-        
-        if (inputAddress === "") {
-            addressError.classList.remove("hidden");
-            return;
-        } else {
-            addressError.classList.add("hidden");
-        }
-
-        if (!web3Ethereum.utils.isAddress(inputAddress)) {
-
-            let resolvedAddress = await resolveENS(inputAddress, web3Ethereum)
-            if (!resolvedAddress.address) resolvedAddress = await resolveIDriss(inputAddress, idriss);
-            if (!resolvedAddress.address) {
-                addressError.classList.remove("hidden");
-                return
-            }
-            addressError.classList.add("hidden");
-            inputAddress = resolvedAddress.address;
-        }
-
-        if (selectedNetworks.length === 0) {
+        if (!selectedNetworks.length) {
             networkError.classList.remove("hidden");
-            return;
-        } else {
-            networkError.classList.add("hidden");
+            return null;
         }
-        
-        if (selectedCoins.length === 0) {
+        networkError.classList.add("hidden");
+    
+        if (!selectedCoins.length) {
             coinError.classList.remove("hidden");
-            return;
-        } else {
-            coinError.classList.add("hidden");
+            return null;
         }
+        coinError.classList.add("hidden");
         
-        const obsUrl = `https://www.idriss.xyz/streamers/obs?streamerAddress=${inputAddress}`;
-        openPopup(obsUrl);
+        return {"networks": selectedNetworks, "coins": selectedCoins, "address": inputAddress}
+    }
 
-        document.getElementById("generatedLinkHeader").innerHTML = "OBS Link";
-        document.getElementById("previewButton").classList.remove("hidden")
-    });
+    generateDonationLinkButton.addEventListener("click", async function() {
+        const urlData = await preGenerate()
 
-    generateSnippetButton.addEventListener("click", async function(event) {
-        let inputAddress = walletAddressInput.value.replace(" ", "");
-
-        const selectedNetworks = Array.from(donationNetworksCheckboxes)
-            .filter(checkbox => checkbox.checked)
-            .map(checkbox => checkbox.value);
-        
-        const selectedCoins = Array.from(donationCoinsCheckboxes)
-            .filter(checkbox => checkbox.checked)
-            .map(checkbox => checkbox.value);
-        
-        if (inputAddress === "") {
-            addressError.classList.remove("hidden");
-            return;
-        } else {
-            addressError.classList.add("hidden");
-        }
-
-        if (!web3Ethereum.utils.isAddress(inputAddress)) {
-
-            let resolvedAddress = await resolveENS(inputAddress, web3Ethereum)
-            if (!resolvedAddress.address) resolvedAddress = await resolveIDriss(inputAddress, idriss);
-            if (!resolvedAddress.address) {
-                addressError.classList.remove("hidden");
-                return
-            }
-            addressError.classList.add("hidden");
-//            inputAddress = resolvedAddress.address;
-        }
-
-
-        if (selectedNetworks.length === 0) {
-            networkError.classList.remove("hidden");
-            return;
-        } else {
-            networkError.classList.add("hidden");
-        }
-        
-        if (selectedCoins.length === 0) {
-            coinError.classList.remove("hidden");
-            return;
-        } else {
-            coinError.classList.add("hidden");
-        }
-        
-        const donationUrl = `https://www.idriss.xyz/streamers/donate?streamerAddress=${inputAddress}&network=${selectedNetworks.join(',')}&token=${selectedCoins.join(',')}`;
+        if (!urlData) return null;
+        const donationUrl = `https://www.idriss.xyz/streamers/donate?streamerAddress=${urlData.address}&network=${urlData.networks.join(',')}&token=${urlData.coins.join(',')}`;
         openPopup(donationUrl);
 
         document.getElementById("generatedLinkHeader").innerHTML = "Donation Link";
         document.getElementById("previewButton").classList.add("hidden")
     });
 
-    function openPopup(url) {
-        const urlPopup = document.getElementById("urlPopup");
-        const generatedUrlTextarea = document.getElementById("generatedUrl");
-        const copyButton = document.getElementById("copyButton");
-        const closeButton = document.getElementById("closeButton");
+    
+    generateObsLinkButton.addEventListener("click", async function() {
+        const urlData = await preGenerate()
 
-        generatedUrlTextarea.value = url;
-        urlPopup.classList.remove("hidden");
+        if (!urlData) return null;
+        
+        const obsUrl = `https://www.idriss.xyz/streamers/obs?streamerAddress=${urlData.address}`;
+        openPopup(obsUrl);
 
-        copyButton.addEventListener("click", function() {
-            generatedUrlTextarea.select();
-            document.execCommand("copy");
-        });
+        document.getElementById("generatedLinkHeader").innerHTML = "OBS Link";
+        document.getElementById("previewButton").classList.remove("hidden")
+    });
 
-        closeButton.addEventListener("click", function() {
-            urlPopup.classList.add("hidden");
-        });
-    }
-
-    walletAddressInput.addEventListener("input", function(event) {
+    walletAddressInput.addEventListener("input", function() {
         addressError.classList.add("hidden");
     });
 
     donationNetworksCheckboxes.forEach(function(checkbox) {
-        checkbox.addEventListener("change", function(event) {
+        checkbox.addEventListener("change", function() {
             networkError.classList.add("hidden");
         });
     });
