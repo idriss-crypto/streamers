@@ -270,7 +270,6 @@ async function callDonationFunction(amount, message, assetAddr) {
             }
             gas = await contractInstance.methods.sendTokenTo(streamerAddress, amount.toString(), assetAddr, message).estimateGas({from: connectedAccount, value: 0});
             result = await contractInstance.methods.sendTokenTo(streamerAddress, amount.toString(), assetAddr, message).send({ from: connectedAccount, value: 0, gas: gas, gasPrice: gasPrice });
-        throw new Error("Invalid network name");
     }
 
     console.log(result)
