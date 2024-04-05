@@ -66,18 +66,19 @@ const web3Polygon = new Web3(new Web3.providers.HttpProvider("https://polygon-rp
 let portal_fi = {
     base: {
         "0x0000000000000000000000000000000000000000": ["base:0x0000000000000000000000000000000000000000", 18],
-        "0xfA980cEd6895AC314E7dE34Ef1bFAE90a5AdD21b": ["base:0xfA980cEd6895AC314E7dE34Ef1bFAE90a5AdD21b", 18],
+        "0xfa980ced6895ac314e7de34ef1bfae90a5add21b": ["base:0xfA980cEd6895AC314E7dE34Ef1bFAE90a5AdD21b", 18],
         "0x4ed4e862860bed51a9570b96d89af5e1b0efefed": ["base:0x4ed4e862860bed51a9570b96d89af5e1b0efefed", 18]
     },
     ethereum: {
         "0x0000000000000000000000000000000000000000": ["ethereum:0x0000000000000000000000000000000000000000", 18],
         "0xb23d80f5fefcddaa212212f028021b41ded428cf": ["ethereum:0xb23d80f5fefcddaa212212f028021b41ded428cf", 18],
-        "0x3F382DbD960E3a9bbCeaE22651E88158d2791550": ["ethereum:0x3F382DbD960E3a9bbCeaE22651E88158d2791550", 18],
-        "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48": ["ethereum:0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", 6]
+        "0x3f382dbd960e3a9bbceae22651e88158d2791550": ["ethereum:0x3F382DbD960E3a9bbCeaE22651E88158d2791550", 18],
+        "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": ["ethereum:0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", 6]
     },
     polygon: {
         "0x0000000000000000000000000000000000000000": ["polygon:0x0000000000000000000000000000000000000000", 18],
-        "0x385Eeac5cB85A38A9a07A70c73e0a3271CfB54A7": ["polygon:0x385Eeac5cB85A38A9a07A70c73e0a3271CfB54A7", 18]
+        "0x385eeac5cb85a38a9a07a70c73e0a3271cfb54a7": ["polygon:0x385Eeac5cB85A38A9a07A70c73e0a3271CfB54A7", 18],
+        "0x2791bca1f2de4661ed88a30c99a7a9449aa84174": ["polygon:0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", 6]
     }
 }
 
@@ -256,10 +257,10 @@ async function getVal(tippingAmount, tokenPrice, decimals) {
 
 async function calculateDollar(_assetAddr, _amount, _network) {
     let priceSt;
-    let response = await (await fetch(`https://www.idriss.xyz/pricing?token=${portal_fi[_network.toLowerCase()][_assetAddr][0]}`)).json();
+    let response = await (await fetch(`https://www.idriss.xyz/pricing?token=${portal_fi[_network.toLowerCase()][_assetAddr.toLowerCase()][0]}`)).json();
     priceSt = response['tokens'][0]['price'];
 
-    let decimals = portal_fi[_network.toLowerCase()][_assetAddr][1];
+    let decimals = portal_fi[_network.toLowerCase()][_assetAddr.toLowerCase()][1];
     let val = this.getVal(_amount, priceSt, decimals);
     return val;
 }
