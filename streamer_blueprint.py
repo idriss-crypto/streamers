@@ -21,6 +21,11 @@ def streamer_donate():
     return render_template('donorPage.html')
 
 
+@streamer_blueprint.route("/streamers/history", methods=["GET"])
+def streamer_history():
+    return render_template('tipHistory.html')
+
+
 @streamer_blueprint.route("/streamers/preview", methods=["GET"])
 def obs_preview():
     return render_template('obsPreview.html')
