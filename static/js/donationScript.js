@@ -440,6 +440,8 @@ let tippingAddressBase = "0x324Ad1738B9308D5AF5E81eDd6389BFa082a8968";
 let tippingAddressEthereum = "0xe18036D7E3377801a19d5Db3f9b236617979674E";
 let tippingAddressPolygon = "0xe35B356ac2c880cCcc769bA9393F0748d94ABBCa";
 let tippingAddressAleph = "0xcA6742d2d6B9dBFFD841DF25C15cFf45FBbB98f4";
+const NATIVE_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 const tippingAddresses = {
     base: tippingAddressBase,
@@ -499,23 +501,23 @@ let portal_fi = {
 
 const DECIMALS_BY_NETWORK_AND_TOKEN = {
     base: {
-        "0x0000000000000000000000000000000000000000": 18,
+        "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee": 18,
         "0xfa980ced6895ac314e7de34ef1bfae90a5add21b": 18,
         "0x4ed4e862860bed51a9570b96d89af5e1b0efefed": 18,
     },
     ethereum: {
-        "0x0000000000000000000000000000000000000000": 18,
+        "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee": 18,
         "0xb23d80f5fefcddaa212212f028021b41ded428cf": 18,
         "0x3f382dbd960e3a9bbceae22651e88158d2791550": 18,
         "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": 6,
     },
     polygon: {
-        "0x0000000000000000000000000000000000000000": 18,
+        "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee": 18,
         "0x385eeac5cb85a38a9a07a70c73e0a3271cfb54a7": 18,
         "0x2791bca1f2de4661ed88a30c99a7a9449aa84174": 6,
     },
     aleph: {
-        "0x0000000000000000000000000000000000000000": 18,
+        "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee": 18,
     },
 };
 
@@ -526,7 +528,7 @@ const NETWORK_IDS = {
     aleph: 41455,
 };
 
-const BUY_TOKEN_BY_NETWORK = {
+const SELL_TOKEN_BY_NETWORK = {
     base: "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
     ethereum: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
     polygon: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
@@ -535,23 +537,23 @@ const BUY_TOKEN_BY_NETWORK = {
 
 let tokenAddresses = {
     base: {
-        eth: "0x0000000000000000000000000000000000000000",
+        eth: NATIVE_ADDRESS,
         prime: "0xfa980ced6895ac314e7de34ef1bfae90a5add21b",
         degen: "0x4ed4e862860bed51a9570b96d89af5e1b0efefed",
     },
     ethereum: {
-        eth: "0x0000000000000000000000000000000000000000",
+        eth: NATIVE_ADDRESS,
         prime: "0xb23d80f5fefcddaa212212f028021b41ded428cf",
         ghst: "0x3f382dbd960e3a9bbceae22651e88158d2791550",
         usdc: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
     },
     polygon: {
-        matic: "0x0000000000000000000000000000000000000000",
+        matic: NATIVE_ADDRESS,
         ghst: "0x385eeac5cb85a38a9a07a70c73e0a3271cfb54a7",
         usdc: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
     },
     aleph: {
-        azero: "0x0000000000000000000000000000000000000000",
+        azero: NATIVE_ADDRESS,
     },
 };
 
@@ -593,7 +595,6 @@ function intersect(array1, array2) {
 
 function populateTokenOptions(network_) {
     tokenSelect.innerHTML = "";
-    console.log("Updating with network ", network_);
     availableTokens[network_.toLowerCase()].forEach((token_) => {
         const option = document.createElement("option");
         option.value = token_;
@@ -608,7 +609,6 @@ function splitParams(params) {
 
 async function connectWallet() {
     provider = window.ethereum;
-    console.log(provider);
     await provider.enable();
     web3 = await new Web3(provider);
     document.querySelector("#connectWalletButton").classList.add("hidden");
@@ -626,7 +626,6 @@ async function connectWallet() {
         loginDisplay;
     document.querySelector("#polygon-scan-link").href =
         EXPLORER_LINK + "/address/" + accounts[0];
-    console.log(connectedAccount);
     return;
 }
 
@@ -648,7 +647,6 @@ async function sendDonation() {
         tokenAddresses[selectedNetwork.toLowerCase()][
             selectedToken.toLowerCase()
         ];
-    console.log(message, amount, tokenAddress);
 
     let amountInteger;
     let amountNormal;
@@ -661,8 +659,6 @@ async function sendDonation() {
     amountInteger = calculated.integer;
     amountNormal = calculated.normal;
 
-    console.log("Calculate amount result");
-    console.log(amountInteger.toString(), amountNormal.toString());
     await callDonationFunction(amountInteger.toString(), message, tokenAddress);
 }
 
@@ -673,22 +669,18 @@ async function calculateAmount(_assetAddr, _amount, _network) {
         DECIMALS_BY_NETWORK_AND_TOKEN[_network.toLowerCase()][
             _assetAddr.toLowerCase()
         ];
-
     if (
-        BUY_TOKEN_BY_NETWORK[_network.toLowerCase()] != _assetAddr.toLowerCase()
+        SELL_TOKEN_BY_NETWORK[_network.toLowerCase()] !=
+        _assetAddr.toLowerCase()
     ) {
-        let url = `https://api.idriss.xyz/token-price?buyToken=${
-            BUY_TOKEN_BY_NETWORK[_network]
-        }&sellToken=${_assetAddr.toLowerCase()}&network=${
+        let url = `https://api.idriss.xyz/token-price?sellToken=${
+            SELL_TOKEN_BY_NETWORK[_network]
+        }&buyToken=${_assetAddr.toLowerCase()}&network=${
             NETWORK_IDS[_network.toLowerCase()]
-        }&sellAmount=${_amount}`;
+        }&sellAmount=1000000`;
         let responseNew = await (await fetch(url)).json();
         priceSt = responseNew["price"];
     }
-
-    // let response = await (await fetch(`https://www.idriss.xyz/pricing?token=${portal_fi[_network.toLowerCase()][_assetAddr.toLowerCase()][0]}`)).json();
-    // priceSt = response['tokens'][0]['price'];
-    console.log(priceSt, decimals);
 
     let ten = new BN(10);
     let base = ten.pow(new BN(decimals));
@@ -701,29 +693,32 @@ async function calculateAmount(_assetAddr, _amount, _network) {
     return {integer, normal};
 }
 
-async function getAmount(amount, tokenPrice, decimals) {
+async function getAmount(amount, tokenPerDollar, decimals) {
     const BN = w3.utils.BN;
+
     const ten = new BN(10);
     let decimalsTemp = new BN(decimals);
     let baseTemp = ten.pow(new BN(decimalsTemp));
-    console.log(tokenPrice, tokenPrice.toString());
-    let decimalCountPrice = tokenPrice.includes(".")
-        ? tokenPrice.split(".")[1].length
-        : 0;
-    let multiplierPrice = Math.pow(10, decimalCountPrice) || 1;
-    let tokenPriceToInt = new BN(tokenPrice.replace(".", ""));
 
+    // The number of tokens per $1
+    let decimalCountPerDollar = tokenPerDollar.includes(".")
+        ? tokenPerDollar.split(".")[1].length
+        : 0;
+    let multiplierPerDollar = Math.pow(10, decimalCountPerDollar) || 1;
+    let tokenPerDollarToInt = new BN(tokenPerDollar.replace(".", ""));
+
+    // The amount in dollars
     let decimalCountValue = amount.includes(".")
         ? amount.split(".")[1].length
         : 0;
     let multiplierValue = Math.pow(10, decimalCountValue) || 1;
     let tokenValueToInt = new BN(amount.replace(".", ""));
 
-    console.log(decimalCountValue);
-    let retVal = new BN(multiplierPrice.toString())
-        .mul(baseTemp)
+    // The calculation adjusts here by multiplying by tokenPerDollar instead of dividing by tokenPrice
+    let retVal = tokenPerDollarToInt
         .mul(tokenValueToInt)
-        .div(tokenPriceToInt)
+        .mul(baseTemp)
+        .div(new BN(multiplierPerDollar.toString()))
         .div(new BN(multiplierValue.toString()));
 
     return retVal;
@@ -732,7 +727,6 @@ async function getAmount(amount, tokenPrice, decimals) {
 async function switchNetwork(web3, networkName, provider) {
     // Get current network ID
     const currentNetworkId = await web3.eth.net.getId();
-    console.log("Currently connected with id: ", currentNetworkId);
 
     // Get network ID for desired network
     let desiredNetworkId = NETWORK_IDS[networkName.toLowerCase()];
@@ -746,8 +740,6 @@ async function switchNetwork(web3, networkName, provider) {
 }
 
 async function callDonationFunction(amount, message, assetAddr) {
-    console.log(amount, message, assetAddr);
-
     let BN = w3.utils.BN;
 
     await switchNetwork(web3, selectedNetwork.toLowerCase(), provider);
@@ -765,15 +757,8 @@ async function callDonationFunction(amount, message, assetAddr) {
     } catch (e) {
         console.log("Could not estimate gas price: ", e);
     }
-    console.log(
-        "sending transactions through: ",
-        contractInstance,
-        "with gas: ",
-        gasPrice
-    );
     switch (assetAddr.toLowerCase()) {
-        case "0x0000000000000000000000000000000000000000":
-            console.log("Sending native token");
+        case "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee":
             gas = await contractInstance.methods
                 .sendTo(streamerAddress, amount.toString(), message)
                 .estimateGas({
@@ -790,7 +775,6 @@ async function callDonationFunction(amount, message, assetAddr) {
                 });
             break;
         default:
-            console.log("Sending erc20");
             const tokenContract = new web3.eth.Contract(ERC20Abi, assetAddr);
             const allowance = await tokenContract.methods
                 .allowance(
@@ -800,7 +784,6 @@ async function callDonationFunction(amount, message, assetAddr) {
                 .call();
             const allowanceBN = new BN(allowance);
             const amountBN = new BN(amount);
-            console.log("sending amount: ", amountBN.toString());
             if (allowanceBN.lte(amountBN)) {
                 let approval = await tokenContract.methods
                     .approve(
@@ -834,9 +817,6 @@ async function callDonationFunction(amount, message, assetAddr) {
                     gasPrice: gasPrice,
                 });
     }
-
-    console.log(result);
-
     return result;
 }
 
@@ -858,13 +838,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     networkParams = urlParams.get("network");
     tokenParams = urlParams.get("token");
     streamerAddress = urlParams.get("streamerAddress");
-    console.log(streamerAddress);
 
     if (!w3.utils.isAddress(streamerAddress)) {
         streamerAddress =
             (await resolveENS(inputAddress, w3)) ||
             (await resolveIDriss(inputAddress, idriss));
-        console.log(streamerAddress);
     }
 
     const networkParamsArray = splitParams(networkParams);
@@ -875,21 +853,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             tokenParamsArray,
             tokenNetworkCombinations[network_.toLowerCase()]
         );
-        console.log(
-            "GENERATED INTERSECT",
-            intersection,
-            tokenParamsArray,
-            networkParamsArray
-        );
         if (intersection.length > 0) {
             selectedNetwork = selectedNetwork || network_;
             selectedToken = selectedToken || intersection[0];
-            console.log(intersection);
             availableTokens[network_.toLowerCase()] = intersection;
         }
     });
-
-    console.log("availableTokens", availableTokens);
 
     networkSelect.innerHTML = "";
     networkParamsArray.forEach((network_) => {
@@ -920,7 +889,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     networkSelect.addEventListener("change", (event) => {
         selectedNetwork = event.target.value;
         populateTokenOptions(selectedNetwork.toLowerCase());
-        console.log("Selected network:", selectedNetwork);
 
         let changeEvent = new Event("change", {bubbles: true});
         tokenSelect.dispatchEvent(changeEvent);
@@ -928,7 +896,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     tokenSelect.addEventListener("change", (event) => {
         selectedToken = event.target.value;
-        console.log("Selected token:", selectedToken);
     });
 
     textarea.addEventListener("input", () => {

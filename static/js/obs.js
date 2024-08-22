@@ -14,10 +14,11 @@ let resTip = new Array();
 async function resolveENS(identifier, web3) {
     try {
         if (web3.utils.isAddress(identifier)) {
-            const ensName = await fetch(
+            const response = await fetch(
                 `https://www.idriss.xyz/v1/ENS-Addresses?identifer=${identifier}`
             );
-            return {address: identifier, ens: ensName};
+            const ensData = await response.json();
+            return {address: identifier, ens: ensData.name};
         } else {
             const resolvedAddress = await web3.eth.ens.getAddress(identifier);
             return {address: resolvedAddress, ens: identifier};
@@ -703,8 +704,8 @@ let tippingAddressBase = "0x324Ad1738B9308D5AF5E81eDd6389BFa082a8968";
 let tippingAddressEthereum = "0xe18036D7E3377801a19d5Db3f9b236617979674E";
 let tippingAddressPolygon = "0xe35B356ac2c880cCcc769bA9393F0748d94ABBCa";
 let tippingAddressAleph = "0xcA6742d2d6B9dBFFD841DF25C15cFf45FBbB98f4";
-
-let NULL_ADDR = "0x0000000000000000000000000000000000000000";
+const NATIVE_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 const web3Base = new Web3(
     new Web3.providers.HttpProvider("https://mainnet.base.org")
@@ -770,23 +771,23 @@ let portal_fi = {
 
 const DECIMALS_BY_NETWORK_AND_TOKEN = {
     base: {
-        "0x0000000000000000000000000000000000000000": 18,
+        "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee": 18,
         "0xfa980ced6895ac314e7de34ef1bfae90a5add21b": 18,
         "0x4ed4e862860bed51a9570b96d89af5e1b0efefed": 18,
     },
     ethereum: {
-        "0x0000000000000000000000000000000000000000": 18,
+        "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee": 18,
         "0xb23d80f5fefcddaa212212f028021b41ded428cf": 18,
         "0x3f382dbd960e3a9bbceae22651e88158d2791550": 18,
         "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": 6,
     },
     polygon: {
-        "0x0000000000000000000000000000000000000000": 18,
+        "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee": 18,
         "0x385eeac5cb85a38a9a07a70c73e0a3271cfb54a7": 18,
         "0x2791bca1f2de4661ed88a30c99a7a9449aa84174": 6,
     },
     aleph: {
-        "0x0000000000000000000000000000000000000000": 18,
+        "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee": 18,
     },
 };
 
@@ -797,7 +798,7 @@ const NETWORK_IDS = {
     aleph: 41455,
 };
 
-const BUY_TOKEN_BY_NETWORK = {
+const SELL_TOKEN_BY_NETWORK = {
     base: "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
     ethereum: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
     polygon: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
@@ -836,6 +837,7 @@ async function setCurrBlock() {
     currBlockEthereum = await web3Ethereum.eth.getBlockNumber();
     currBlockPolygon = await web3Polygon.eth.getBlockNumber();
     currBlockAleph = await web3Aleph.eth.getBlockNumber();
+    // currBlockAleph = 1614830;
 }
 
 // Only support native and erc20 transfer fetching for now
@@ -1020,29 +1022,33 @@ async function fetchDonations() {
     return tempNewDonations;
 }
 
-async function getVal(tippingAmount, tokenPrice, decimals) {
-    return roundUp((tippingAmount / Math.pow(10, decimals)) * tokenPrice, 2);
+async function getVal(tippingAmount, tokenPerDollar, decimals) {
+    return roundUp(tippingAmount / Math.pow(10, decimals) / tokenPerDollar, 2);
 }
 
 async function calculateDollar(_assetAddr, _amount, _network) {
-    let priceSt = "1";
+    let amount_per_dollar = "1";
+    if (_assetAddr == NULL_ADDRESS) {
+        _assetAddr = NATIVE_ADDRESS;
+    }
     let decimals =
         DECIMALS_BY_NETWORK_AND_TOKEN[_network.toLowerCase()][
             _assetAddr.toLowerCase()
         ];
 
     if (
-        BUY_TOKEN_BY_NETWORK[_network.toLowerCase()] != _assetAddr.toLowerCase()
+        SELL_TOKEN_BY_NETWORK[_network.toLowerCase()] !=
+        _assetAddr.toLowerCase()
     ) {
-        let url = `https://api.idriss.xyz/token-price?buyToken=${
-            BUY_TOKEN_BY_NETWORK[_network]
-        }&sellToken=${_assetAddr.toLowerCase()}&network=${
+        let url = `https://api.idriss.xyz/token-price?sellToken=${
+            SELL_TOKEN_BY_NETWORK[_network]
+        }&buyToken=${_assetAddr.toLowerCase()}&network=${
             NETWORK_IDS[_network.toLowerCase()]
-        }&sellAmount=${_amount}`;
+        }&sellAmount=1000000`;
         let responseNew = await (await fetch(url)).json();
-        priceSt = responseNew["price"];
+        amount_per_dollar = responseNew["price"];
     }
-    let val = this.getVal(_amount, priceSt, decimals);
+    let val = this.getVal(_amount, amount_per_dollar, decimals);
     return val;
 }
 
@@ -1076,7 +1082,6 @@ interval = setInterval(async function () {
         }
 
         message = ret[i].message;
-        console.log(message);
         resTip.push([basicInfo, message]);
     }
 }, 5000);
