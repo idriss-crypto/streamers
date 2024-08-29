@@ -7,12 +7,35 @@
         <meta name="description" content="A preview of your OBS overlay" />
         <script src="https://cdn.tailwindcss.com"></script>
         <!--Use global icons-->
-        <link rel="apple-touch-icon" sizes="180x180" href="../static/images/apple-touch-icon.png" />
-        <link rel="shortcut icon" type="image/png" href="../static/images/favicon32.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="../static/images/favicon32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="../static/images/favicon16.png" />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="../static/images/apple-touch-icon.png"
+        />
+        <link
+            rel="shortcut icon"
+            type="image/png"
+            href="../static/images/favicon32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="../static/images/favicon32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="../static/images/favicon16.png"
+        />
     </head>
-    <body class="relative h-screen bg-cover bg-center bg-fixed overflow-hidden" style="background-image: url('https://storage.googleapis.com/prod.static-assets.parallelnft.com/newsfeed/images/Kathari_Pod_Room_02.png');">
+    <body
+        class="relative h-screen bg-cover bg-center bg-fixed overflow-hidden"
+        style="
+            background-image: url('https://storage.googleapis.com/prod.static-assets.parallelnft.com/newsfeed/images/Kathari_Pod_Room_02.png');
+        "
+    >
         <style>
             #fader {
                 opacity: 1;
@@ -20,14 +43,33 @@
             }
         </style>
         <!-- NOTIFICATION -->
-        <div id="fader" style="opacity: 100;" class="mt-12">
-            <div id="donationAlert" class="absolute top-0 left-0 p-4 text-gray-900 bg-white bg-opacity-80 rounded-r-md flex items-center">
-                <div class="flex items-center justify-center h-14 w-14 text-gray-900">
-                    <img class="w-auto h-16" src="../static/images/IDriss_Brandmark.svg" alt="IDriss" />
+        <div id="fader" style="opacity: 100" class="mt-12">
+            <div
+                id="donationAlert"
+                class="absolute top-0 left-0 p-4 text-gray-900 bg-white bg-opacity-80 rounded-r-md flex items-center"
+            >
+                <div
+                    class="flex items-center justify-center h-14 w-14 text-gray-900"
+                >
+                    <img
+                        class="w-auto h-16"
+                        src="../static/images/IDriss_Brandmark.svg"
+                        alt="IDriss"
+                    />
                 </div>
                 <div>
-                    <p id="baseInfo" class="ml-3 text-xl text-gray-900 leading-6 font-bold">Someone sent $1</p>
-                    <dd id="message" class="ml-3 text-lg text-gray-900 font-medium">GG!</dd>
+                    <p
+                        id="baseInfo"
+                        class="ml-3 text-xl text-gray-900 leading-6 font-bold"
+                    >
+                        Someone sent $1
+                    </p>
+                    <dd
+                        id="message"
+                        class="ml-3 text-lg text-gray-900 font-medium"
+                    >
+                        GG!
+                    </dd>
                 </div>
             </div>
         </div>
