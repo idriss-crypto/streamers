@@ -23,7 +23,7 @@ let tokenAddresses = {
         usdc: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
     },
     polygon: {
-        matic: "0x0000000000000000000000000000000000000000",
+        pol: "0x0000000000000000000000000000000000000000",
         ghst: "0x385eeac5cb85a38a9a07a70c73e0a3271cfb54a7",
         usdc: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
     },

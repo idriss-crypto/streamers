@@ -548,7 +548,7 @@ let tokenAddresses = {
         usdc: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
     },
     polygon: {
-        matic: NATIVE_ADDRESS,
+        pol: NATIVE_ADDRESS,
         ghst: "0x385eeac5cb85a38a9a07a70c73e0a3271cfb54a7",
         usdc: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
     },
@@ -560,7 +560,7 @@ let tokenAddresses = {
 const tokenNetworkCombinations = {
     base: ["ETH", "PRIME", "DEGEN"],
     ethereum: ["ETH", "USDC", "PRIME", "GHST"],
-    polygon: ["MATIC", "USDC", "GHST"],
+    polygon: ["POL", "USDC", "GHST"],
     aleph: ["AZERO"],
 };
 
@@ -847,6 +847,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const networkParamsArray = splitParams(networkParams);
     const tokenParamsArray = splitParams(tokenParams);
+
+    tokenParamsArray = tokenParamsArray.map(param => param === "MATIC" ? "POL" : param);
 
     networkParamsArray.forEach((network_) => {
         const intersection = intersect(
