@@ -846,7 +846,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     const networkParamsArray = splitParams(networkParams);
-    const tokenParamsArray = splitParams(tokenParams);
+    let tokenParamsArray = splitParams(tokenParams);
 
     tokenParamsArray = tokenParamsArray.map(param => param === "MATIC" ? "POL" : param);
 
